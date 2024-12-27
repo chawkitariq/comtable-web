@@ -1,11 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-import { HomePage } from "./home";
+import { RootPage } from "./root";
+import DefaultLayout from "@/layouts/default";
 
 export function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<HomePage />} />
+        <Route element={<DefaultLayout />}>
+          <Route index element={<RootPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
