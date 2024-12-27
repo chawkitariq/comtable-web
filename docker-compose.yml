@@ -6,4 +6,4 @@ services:
       - "./:/home/node/web"
     ports:
       - "5173:5173"
-    command: npm run dev
+    command: npm run dev:docker
