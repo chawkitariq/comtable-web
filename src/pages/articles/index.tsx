@@ -32,7 +32,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useMemo, useState } from "react";
-import { api } from "@/configs";
+import { ArticleApiService } from "@/services";
 
 export function ArticlesIndexPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -42,13 +42,8 @@ export function ArticlesIndexPage() {
 
   const { data: articles } = useQuery({
     queryKey: ["articles"],
-    queryFn: async () => {
-      const { data } = await api.get("/articles");
-      return data;
-    },
+    queryFn: ArticleApiService.findAll,
   });
-
-  console.log("render");
 
   const tableData = useMemo(() => articles ?? [], [articles]);
 
