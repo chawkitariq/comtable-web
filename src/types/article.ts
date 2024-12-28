@@ -13,3 +13,13 @@ export type ArticleType = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type CreateArticlePayloadType = {
+  name: string;
+  type: string;
+  salePrice: number;
+  purchasePrice: number;
+  disabled?: boolean;
+  taxIds?: string[];
+  categoryId?: string;
+};
