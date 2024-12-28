@@ -1,14 +1,13 @@
 export type ArticleType = {
   id: string;
   name: string;
+  type: string;
   sku: string;
   description?: string;
   salePrice: number;
   purchasePrice: number;
-  quantity: number;
   company?: unknown;
   category?: unknown;
-  tax?: unknown;
   createdBy?: unknown;
   createdAt: Date;
   updatedAt: Date;
@@ -16,10 +15,16 @@ export type ArticleType = {
 
 export type CreateArticlePayloadType = {
   name: string;
-  type: string;
+  type: ArticleTypeEnum;
   salePrice: number;
   purchasePrice: number;
-  disabled?: boolean;
   taxIds?: string[];
   categoryId?: string;
 };
+
+export type UpdateArticlePayloadType = Partial<CreateArticlePayloadType>;
+
+export enum ArticleTypeEnum {
+  Product = "product",
+  Service = "service",
+}
