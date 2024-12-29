@@ -33,7 +33,7 @@ import { ArticleApiService } from "@/services";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router";
 
-export function ArticleDefaultPage() {
+export function ArticleRootPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});

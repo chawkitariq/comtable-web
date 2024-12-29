@@ -4,11 +4,11 @@ import { Authenticable } from "@/components";
 import { LoginPage, RegisterPage } from "./authentication";
 import {
   ArticleEditPage,
-  ArticleDefaultPage,
+  ArticleRootPage,
   ArticleNewPage,
   ArticleCopyPage,
 } from "./article";
-import { DefaultPage } from ".";
+import { RootPage } from ".";
 import { DashboardLayout, DefaultLayout } from "@/layouts";
 
 export function Router() {
@@ -23,13 +23,13 @@ export function Router() {
             </Authenticable>
           }
         >
-          <Route index element={<DefaultPage />} />
+          <Route index element={<RootPage />} />
 
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardIndexPage />} />
 
             <Route path="articles">
-              <Route index element={<ArticleDefaultPage />} />
+              <Route index element={<ArticleRootPage />} />
               <Route path="new" element={<ArticleNewPage />} />
               <Route path=":articleId/edit" element={<ArticleEditPage />} />
               <Route path=":articleId/copy" element={<ArticleCopyPage />} />
