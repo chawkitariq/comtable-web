@@ -26,7 +26,7 @@ export const useAuthenticationStore = create<
     persist(
       (set, get) => ({
         ...initialState,
-        isAuthenticated: () => !isExpired(get().tokenExpiredAt),
+        isAuthenticated: () => isExpired(get().tokenExpiredAt),
         login: (payload: AuthenticationLoginActionPayloadType) => {
           set(() => payload);
         },

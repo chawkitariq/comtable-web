@@ -1,11 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-import DefaultLayout from "@/layouts/default";
 import { DashboardIndexPage } from "./dashboard";
-import { ArticlesIndexPage } from "./articles";
-import { ArticlesEditPage } from "./articles/edit";
-import { ArticlesNewPage } from "./articles/new";
 import { Authenticable } from "@/components";
 import { LoginPage, RegisterPage } from "./authentication";
+import {
+  ArticlesEditPage,
+  ArticlesIndexPage,
+  ArticlesNewPage,
+} from "./articles";
+import { IndexPage } from ".";
+import { DashboardLayout, DefaultLayout } from "@/layouts";
 
 export function Router() {
   return (
@@ -19,12 +22,16 @@ export function Router() {
             </Authenticable>
           }
         >
-          <Route index element={<DashboardIndexPage />} />
+          <Route index element={<IndexPage />} />
 
-          <Route path="articles">
-            <Route index element={<ArticlesIndexPage />} />
-            <Route path="new" element={<ArticlesNewPage />} />
-            <Route path=":articleId/edit" element={<ArticlesEditPage />} />
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<DashboardIndexPage />} />
+
+            <Route path="articles">
+              <Route index element={<ArticlesIndexPage />} />
+              <Route path="new" element={<ArticlesNewPage />} />
+              <Route path=":articleId/edit" element={<ArticlesEditPage />} />
+            </Route>
           </Route>
         </Route>
 
