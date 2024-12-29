@@ -33,7 +33,7 @@ import { ArticleApiService } from "@/services";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router";
 
-export function ArticlesIndexPage() {
+export function ArticleDefaultPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -206,7 +206,7 @@ export function ArticlesIndexPage() {
                   <Pencil />
                   Modifier
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate(`${item.id}/edit`)}>
+                <DropdownMenuItem onClick={() => navigate(`${item.id}/copy`)}>
                   <Copy />
                   Dupliquer
                 </DropdownMenuItem>

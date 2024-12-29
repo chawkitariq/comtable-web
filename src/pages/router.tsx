@@ -3,11 +3,12 @@ import { DashboardIndexPage } from "./dashboard";
 import { Authenticable } from "@/components";
 import { LoginPage, RegisterPage } from "./authentication";
 import {
-  ArticlesEditPage,
-  ArticlesIndexPage,
-  ArticlesNewPage,
-} from "./articles";
-import { IndexPage } from ".";
+  ArticleEditPage,
+  ArticleDefaultPage,
+  ArticleNewPage,
+  ArticleCopyPage,
+} from "./article";
+import { DefaultPage } from ".";
 import { DashboardLayout, DefaultLayout } from "@/layouts";
 
 export function Router() {
@@ -22,15 +23,16 @@ export function Router() {
             </Authenticable>
           }
         >
-          <Route index element={<IndexPage />} />
+          <Route index element={<DefaultPage />} />
 
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardIndexPage />} />
 
             <Route path="articles">
-              <Route index element={<ArticlesIndexPage />} />
-              <Route path="new" element={<ArticlesNewPage />} />
-              <Route path=":articleId/edit" element={<ArticlesEditPage />} />
+              <Route index element={<ArticleDefaultPage />} />
+              <Route path="new" element={<ArticleNewPage />} />
+              <Route path=":articleId/edit" element={<ArticleEditPage />} />
+              <Route path=":articleId/copy" element={<ArticleCopyPage />} />
             </Route>
           </Route>
         </Route>

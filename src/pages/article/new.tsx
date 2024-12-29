@@ -13,7 +13,7 @@ const validationSchema = object().shape({
   purchasePrice: number().min(0),
 });
 
-export function ArticlesNewPage() {
+export function ArticleNewPage() {
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();

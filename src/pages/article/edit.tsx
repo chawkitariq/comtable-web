@@ -13,7 +13,7 @@ const validationSchema = object().shape({
   purchasePrice: number().min(0),
 });
 
-export function ArticlesEditPage() {
+export function ArticleEditPage() {
   const { articleId } = useParams();
 
   const { data: article } = useQuery({

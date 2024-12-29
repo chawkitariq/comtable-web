@@ -10,7 +10,7 @@ import {
 import { CompanyApiService } from "@/services/company-api";
 import { useQuery } from "@tanstack/react-query";
 
-export function IndexPage() {
+export function DefaultPage() {
   const { data: companies } = useQuery({
     queryKey: ["companies"],
     queryFn: CompanyApiService.findAll,
