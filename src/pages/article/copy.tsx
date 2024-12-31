@@ -10,6 +10,13 @@ import {
 import { number, object, string } from "yup";
 import { ArticleForm } from "./form";
 import { useSessionStore } from "@/stores";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const validationSchema = object().shape({
   name: string().required("Obligatoire"),
@@ -59,5 +66,15 @@ export function ArticleCopyPage() {
     enableReinitialize: true,
   });
 
-  return <ArticleForm form={form} />;
+  return (
+    <Dialog open={true} onOpenChange={() => navigate("/articles")}>
+      <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+        <DialogHeader>
+          <DialogTitle>Copie</DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <ArticleForm form={form} />
+      </DialogContent>
+    </Dialog>
+  );
 }

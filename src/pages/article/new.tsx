@@ -6,6 +6,13 @@ import { number, object, string } from "yup";
 import { ArticleForm } from "./form";
 import { useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const validationSchema = object().shape({
   name: string().required("Obligatoire"),
@@ -43,5 +50,15 @@ export function ArticleNewPage() {
     onSubmit: (values) => createArticle(values),
   });
 
-  return <ArticleForm form={form} />;
+  return (
+    <Dialog open={true} onOpenChange={() => navigate("/articles")}>
+      <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+        <DialogHeader>
+          <DialogTitle>Nouveau</DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <ArticleForm form={form} />
+      </DialogContent>
+    </Dialog>
+  );
 }

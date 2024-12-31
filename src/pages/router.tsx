@@ -28,8 +28,7 @@ export function Router() {
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardIndexPage />} />
 
-            <Route path="articles">
-              <Route index element={<ArticleRootPage />} />
+            <Route path="articles" element={<ArticleRootPage />}>
               <Route path="new" element={<ArticleNewPage />} />
               <Route path=":articleId/edit" element={<ArticleEditPage />} />
               <Route path=":articleId/copy" element={<ArticleCopyPage />} />
