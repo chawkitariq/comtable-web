@@ -31,6 +31,7 @@ import {
   ChevronsUpDown,
   LogOut,
   Plus,
+  ReceiptText,
 } from "lucide-react";
 import React from "react";
 import { Link, Outlet } from "react-router";
@@ -111,6 +112,14 @@ export function DashboardLayout() {
                     <Link to="/articles">
                       <Archive />
                       <span>Articles</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/invoices">
+                      <ReceiptText />
+                      <span>Factures</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
