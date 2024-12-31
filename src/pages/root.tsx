@@ -32,8 +32,8 @@ export function RootPage() {
   );
 
   return (
-    <main className="min-h-screen">
-      <section className="w-[900px] mx-auto grid gap-4 mt-48">
+    <main className="min-h-screen py-48">
+      <section className="w-[900px] mx-auto grid gap-4">
         <div>
           <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight">
             Entreprise
