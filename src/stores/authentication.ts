@@ -1,9 +1,17 @@
 import { isExpired } from "@/lib/utils";
-import { AuthenticationTokenType } from "@/types";
+import { AuthenticationTokenType, UserType } from "@/types";
 import { create } from "zustand";
-import { createJSONStorage, devtools, persist } from "zustand/middleware";
+import {
+  createJSONStorage,
+  devtools,
+  persist,
+  subscribeWithSelector,
+} from "zustand/middleware";
+import { useSessionStore } from "./session";
 
-type AuthenticationStoreStateType = AuthenticationTokenType;
+type AuthenticationStoreStateType = Omit<AuthenticationTokenType, "me"> & {
+  me: Partial<UserType>;
+};
 
 type AuthenticationLoginActionPayloadType = AuthenticationStoreStateType;
 
@@ -16,26 +24,39 @@ type AuthenticationStoreActionsType = {
 const initialState: AuthenticationStoreStateType = {
   tokenType: "",
   accessToken: "",
-  tokenExpiredAt: 0,
+  expiresIn: 0,
+  expiredAt: 0,
+  me: {},
 };
 
 export const useAuthenticationStore = create<
   AuthenticationStoreStateType & AuthenticationStoreActionsType
 >()(
   devtools(
-    persist(
-      (set, get) => ({
-        ...initialState,
-        isAuthenticated: () => !isExpired(get().tokenExpiredAt),
-        login: (payload: AuthenticationLoginActionPayloadType) => {
-          set(() => payload);
-        },
-        logout: () => set(() => initialState),
-      }),
-      {
-        name: "comtable-authentication",
-        storage: createJSONStorage(() => localStorage),
-      }
+    subscribeWithSelector(
+      persist(
+        (set, get) => ({
+          ...initialState,
+          isAuthenticated: () => !isExpired(get().expiredAt),
+          login: (payload: AuthenticationLoginActionPayloadType) => {
+            set(() => payload);
+          },
+          logout: () => set(() => initialState),
+        }),
+        {
+          name: "comtable-authentication",
+          storage: createJSONStorage(() => localStorage),
+        }
+      )
     )
   )
+);
+
+useAuthenticationStore.subscribe(
+  (state) => state.accessToken,
+  (accessToken) => {
+    if (!accessToken) {
+      useSessionStore.getState().clear();
+    }
+  }
 );

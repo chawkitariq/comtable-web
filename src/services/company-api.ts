@@ -12,11 +12,6 @@ export class CompanyApiService {
     return data;
   }
 
-  public static async switch(companyId: string): Promise<unknown> {
-    const { data } = await api.post(`/companies/${companyId}/switch`);
-    return data;
-  }
-
   public static async delete(companyId: string): Promise<unknown> {
     const { data } = await api.delete(`/companies/${companyId}`);
     return data;

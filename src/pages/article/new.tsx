@@ -5,6 +5,7 @@ import { ArticleTypeEnum, CreateArticlePayloadType } from "@/types";
 import { number, object, string } from "yup";
 import { ArticleForm } from "./form";
 import { useNavigate } from "react-router";
+import { useSessionStore } from "@/stores";
 
 const validationSchema = object().shape({
   name: string().required("Obligatoire"),
@@ -18,9 +19,13 @@ export function ArticleNewPage() {
 
   const queryClient = useQueryClient();
 
+  const { company } = useSessionStore();
+
   const { mutate: createArticle } = useMutation({
     mutationKey: ["articles"],
-    mutationFn: ArticleApiService.create,
+    mutationFn: (payload: CreateArticlePayloadType) => {
+      return ArticleApiService.create(company?.id!, payload);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["articles"] });
       navigate("/articles");

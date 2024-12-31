@@ -1,14 +1,16 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { CompanyApiService } from "@/services/company-api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSessionStore } from "@/stores";
+import { CompanyType } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 import { useNavigate } from "react-router";
 
 export function RootPage() {
@@ -19,15 +21,25 @@ export function RootPage() {
 
   const navigate = useNavigate();
 
-  const { mutate: swtichCompany } = useMutation({
-    mutationKey: ["companies"],
-    mutationFn: CompanyApiService.switch,
-    onSuccess: () => navigate("/dashboard"),
-  });
+  const { setCompany } = useSessionStore();
+
+  const handleSwitchCompany = useCallback(
+    (company: CompanyType) => {
+      setCompany(company);
+      navigate("/dashboard");
+    },
+    [navigate, setCompany]
+  );
 
   return (
-    <main className="min-h-screen grid place-items-center">
-      <div className="w-[900px] mx-auto">
+    <main className="min-h-screen">
+      <section className="w-[900px] mx-auto grid gap-4 mt-48">
+        <div>
+          <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight">
+            Entreprise
+          </h1>
+          <p className="text-muted-foreground">Sélectionner une entreprise</p>
+        </div>
         {companies && (
           <ul className="grid grid-cols-2 gap-4">
             {companies.map((company) => (
@@ -37,9 +49,11 @@ export function RootPage() {
                     <CardTitle>{company.name}</CardTitle>
                     <CardDescription></CardDescription>
                   </CardHeader>
-                  <CardContent></CardContent>
                   <CardFooter>
-                    <Button onClick={() => swtichCompany(company.id)}>
+                    <Button
+                      size="sm"
+                      onClick={() => handleSwitchCompany(company)}
+                    >
                       Sélectionner
                     </Button>
                   </CardFooter>
@@ -48,7 +62,7 @@ export function RootPage() {
             ))}
           </ul>
         )}
-      </div>
+      </section>
     </main>
   );
 }

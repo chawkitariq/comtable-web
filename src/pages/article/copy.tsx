@@ -9,6 +9,7 @@ import {
 } from "@/types";
 import { number, object, string } from "yup";
 import { ArticleForm } from "./form";
+import { useSessionStore } from "@/stores";
 
 const validationSchema = object().shape({
   name: string().required("Obligatoire"),
@@ -30,10 +31,15 @@ export function ArticleCopyPage() {
 
   const queryClient = useQueryClient();
 
+  const { company } = useSessionStore();
+
   const { mutate: updateArticle } = useMutation({
     mutationKey: ["articles", articleId],
     mutationFn: (payload: UpdateArticlePayloadType) => {
-      return ArticleApiService.create(payload as CreateArticlePayloadType);
+      return ArticleApiService.create(
+        company.id!,
+        payload as CreateArticlePayloadType
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["articles"] });

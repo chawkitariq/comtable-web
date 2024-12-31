@@ -32,6 +32,7 @@ import { useMemo, useState } from "react";
 import { ArticleApiService } from "@/services";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router";
+import { useSessionStore } from "@/stores";
 
 export function ArticleRootPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -39,9 +40,12 @@ export function ArticleRootPage() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
+  const { company } = useSessionStore();
+
   const { data: articles } = useQuery({
-    queryKey: ["articles"],
-    queryFn: ArticleApiService.findAll,
+    queryKey: ["articles", company?.id],
+    queryFn: () => ArticleApiService.findAll(company?.id!),
+    enabled: Boolean(company?.id),
   });
 
   const queryClient = useQueryClient();
