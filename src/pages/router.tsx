@@ -32,7 +32,7 @@ export function Router() {
           <Route index element={<RootPage />} />
 
           <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<DashboardIndexPage />} />
+            <Route path="dashboard" element={<DashboardIndexPage />} />
 
             <Route path="articles" element={<ArticleRootPage />}>
               <Route path="new" element={<ArticleNewPage />} />
@@ -40,12 +40,14 @@ export function Router() {
               <Route path=":articleId/copy" element={<ArticleCopyPage />} />
             </Route>
 
-            <Route path="invoices" element={<InvoiceRootPage />}>
-              <Route path="new" element={<InvoiceNewPage />} />
-              <Route path=":invoiceId/edit" element={<InvoiceEditPage />} />
-              <Route path=":invoiceId/copy" element={<InvoiceCopyPage />} />
-            </Route>
+            <Route path="invoices" element={<InvoiceRootPage />} />
           </Route>
+        </Route>
+
+        <Route path="invoices">
+          <Route path="new" element={<InvoiceNewPage />} />
+          <Route path=":invoiceId/edit" element={<InvoiceEditPage />} />
+          <Route path=":invoiceId/copy" element={<InvoiceCopyPage />} />
         </Route>
 
         <Route path="/login" element={<LoginPage />} />

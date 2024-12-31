@@ -4,15 +4,9 @@ import { CreateDocumentPayloadType } from "@/types";
 import { number, object, string } from "yup";
 import { useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { DocumentInvoiceApiService } from "@/services";
 import { InvoiceForm } from "./form";
+import { Button } from "@/components/ui/button";
 
 const validationSchema = object().shape({
   name: string().required("Obligatoire"),
@@ -46,14 +40,26 @@ export function InvoiceNewPage() {
   });
 
   return (
-    <Dialog open={true} onOpenChange={() => navigate("/invoices")}>
-      <DialogContent onInteractOutside={(e) => e.preventDefault()}>
-        <DialogHeader>
-          <DialogTitle>Nouveau</DialogTitle>
-          <DialogDescription></DialogDescription>
-        </DialogHeader>
-        <InvoiceForm form={form} />
-      </DialogContent>
-    </Dialog>
+    <main className="min-h-screen grid grid-cols-[25%_1fr] gap-4 p-4">
+      <form
+        className="grid grid-rows-[1fr_min-content] gap-4"
+        onSubmit={form.handleSubmit}
+      >
+        <div className="grid gap-4 h-fit">
+          <InvoiceForm form={form} />
+        </div>
+        <div className="flex justify-end gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate("/invoices")}
+          >
+            Annuler
+          </Button>
+          <Button type="submit">Confirmer</Button>
+        </div>
+      </form>
+      <div className="border rounded"></div>
+    </main>
   );
 }

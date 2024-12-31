@@ -90,6 +90,7 @@ export type DocumentTotalType = {
 
 export type CreateDocumentPayloadType = {
   number?: string;
+  orderNumber?: string;
   type?: string;
   status?: string;
   issuedAt?: Date;
