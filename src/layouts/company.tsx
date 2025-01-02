@@ -33,7 +33,7 @@ import {
   ReceiptText,
   Tag,
 } from "lucide-react";
-import React, { useMemo } from "react";
+import React from "react";
 import { Link, Outlet } from "react-router";
 
 export function CompanyLayout() {
@@ -44,18 +44,13 @@ export function CompanyLayout() {
     queryFn: CompanyApiService.findAll,
   });
 
-  const isGreaterThanOneCompany = useMemo(
-    () => (companies?.length as number) > 1,
-    [companies]
-  );
-
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <DropdownMenu open={isGreaterThanOneCompany}>
+              <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton
                     size="lg"
@@ -66,9 +61,7 @@ export function CompanyLayout() {
                         {sessionCompany.name}
                       </span>
                     </div>
-                    {isGreaterThanOneCompany && (
-                      <ChevronsUpDown className="ml-auto" />
-                    )}
+                    <ChevronsUpDown className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent

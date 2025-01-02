@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { CompanyApiService } from "@/services/company-api";
 import { useSessionStore } from "@/stores";
 import { CompanyType } from "@/types";
@@ -21,48 +21,48 @@ export function RootPage() {
 
   const navigate = useNavigate();
 
-  const { setCompany } = useSessionStore();
+  const { company, setCompany } = useSessionStore();
 
   const handleSwitchCompany = useCallback(
-    (company: CompanyType) => {
-      setCompany(company);
-      navigate("/articles");
+    (id: string) => {
+      if (id) {
+        const company = companies?.find(
+          (company) => company.id === id
+        ) as CompanyType;
+        setCompany(company);
+        navigate("/articles");
+      }
     },
-    [navigate, setCompany]
+    [companies, navigate, setCompany]
   );
 
   return (
-    <main className="min-h-screen py-48">
-      <section className="w-[900px] mx-auto grid gap-4">
-        <div>
-          <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight">
-            Entreprise
-          </h1>
-          <p className="text-muted-foreground">Sélectionner une entreprise</p>
-        </div>
-        {companies && (
-          <ul className="grid grid-cols-2 gap-4">
-            {companies.map((company) => (
-              <li key={company.id}>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{company.name}</CardTitle>
-                    <CardDescription></CardDescription>
-                  </CardHeader>
-                  <CardFooter>
-                    <Button
-                      size="sm"
-                      onClick={() => handleSwitchCompany(company)}
-                    >
-                      Sélectionner
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </li>
+    <div className="min-h-screen grid place-items-center">
+      <Card className="w-6/12">
+        <CardHeader>
+          <CardTitle>Entreprises</CardTitle>
+          <CardDescription>Séléctionner une entreprise</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ToggleGroup
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            type="single"
+            value={company.id}
+            onValueChange={handleSwitchCompany}
+          >
+            {companies?.map((company) => (
+              <ToggleGroupItem
+                key={company.id}
+                className="min-h-48"
+                variant="outline"
+                value={company.id}
+              >
+                <div>{company.name}</div>
+              </ToggleGroupItem>
             ))}
-          </ul>
-        )}
-      </section>
-    </main>
+          </ToggleGroup>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
