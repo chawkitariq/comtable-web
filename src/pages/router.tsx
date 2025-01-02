@@ -36,9 +36,9 @@ export function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Authenticable />}>
-          <Route element={<DefaultLayout />}>
-            <Route index element={<RootPage />} />
+          <Route index element={<RootPage />} />
 
+          <Route element={<DefaultLayout />}>
             <Route path="companies" element={<CompanyRootPage />}>
               <Route path="new" element={<CompanyNewPage />} />
               <Route path=":companyId/edit" element={<CompanyEditPage />} />

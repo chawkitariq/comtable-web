@@ -38,7 +38,7 @@ export function RootPage() {
 
   return (
     <div className="min-h-screen grid place-items-center">
-      <Card className="w-6/12">
+      <Card className="h-5/6 w-6/12">
         <CardHeader>
           <CardTitle>Entreprises</CardTitle>
           <CardDescription>Séléctionner une entreprise</CardDescription>
