@@ -29,17 +29,6 @@ export const CategoryForm = forwardRef<HTMLFormElement, CategoryFormProps>(
       >
         <div className="grid gap-4">
           <div className="grid gap-4">
-            <Label htmlFor="name">Nom</Label>
-            <Input
-              id="name"
-              name="name"
-              value={form.values.name}
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
-            />
-          </div>
-
-          <div className="grid gap-4">
             <Label>Type</Label>
             <Select
               value={form.values.type}
@@ -56,6 +45,17 @@ export const CategoryForm = forwardRef<HTMLFormElement, CategoryFormProps>(
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="grid gap-4">
+            <Label htmlFor="name">Nom</Label>
+            <Input
+              id="name"
+              name="name"
+              value={form.values.name}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+            />
           </div>
         </div>
 

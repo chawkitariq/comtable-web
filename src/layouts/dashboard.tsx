@@ -102,17 +102,17 @@ export function DashboardLayout() {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <Link to="/articles">
-                      <Archive />
-                      <span>Articles</span>
+                    <Link to="/invoices">
+                      <ReceiptText />
+                      <span>Factures</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <Link to="/invoices">
-                      <ReceiptText />
-                      <span>Factures</span>
+                    <Link to="/articles">
+                      <Archive />
+                      <span>Articles</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

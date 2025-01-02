@@ -52,7 +52,10 @@ export function ArticleNewPage() {
 
   return (
     <Dialog open={true} onOpenChange={() => navigate("/articles")}>
-      <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent
+        className="h-[90vh] min-w-[35vw] overflow-y-auto grid grid-rows-[auto_1fr]"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>Nouveau</DialogTitle>
           <DialogDescription></DialogDescription>

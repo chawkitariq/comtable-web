@@ -69,7 +69,7 @@ export function ContactCopyPage() {
   return (
     <Dialog open={true} onOpenChange={() => navigate("/contacts")}>
       <DialogContent
-        className="h-[90vh] min-w-[35vw] overflow-y-auto"
+        className="h-[90vh] min-w-[35vw] overflow-y-auto grid grid-rows-[auto_1fr]"
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
