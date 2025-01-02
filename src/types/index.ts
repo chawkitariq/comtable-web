@@ -4,5 +4,6 @@ export * from "./category";
 export * from "./company";
 export * from "./document";
 export * from "./contact";
+export * from "./role";
 export * from "./tax";
 export * from "./user";

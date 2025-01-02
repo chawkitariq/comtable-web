@@ -5,7 +5,7 @@ import { CompanyLayout, DefaultLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "./authentication";
 import { CompanyEditPage, CompanyNewPage, CompanyRootPage } from "./company";
 import { TaxCopyPage, TaxEditPage, TaxNewPage, TaxRootPage } from "./tax";
-import { RootPage } from ".";
+import { RoleRootPage, RootPage, UserRootPage } from ".";
 import {
   ArticleEditPage,
   ArticleRootPage,
@@ -30,7 +30,6 @@ import {
   CategoryNewPage,
   CategoryRootPage,
 } from "./category";
-import { UserRootPage } from "./user";
 
 export function Router() {
   return (
@@ -46,6 +45,7 @@ export function Router() {
             </Route>
 
             <Route path="users" element={<UserRootPage />} />
+            <Route path="roles" element={<RoleRootPage />} />
           </Route>
 
           <Route element={<CompanyLayout />}>
