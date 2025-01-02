@@ -34,7 +34,7 @@ import {
   Tag,
 } from "lucide-react";
 import React from "react";
-import { Link, Outlet } from "react-router";
+import { Link, NavLink, Outlet } from "react-router";
 
 export function CompanyLayout() {
   const { company: sessionCompany, setCompany } = useSessionStore();
@@ -104,44 +104,54 @@ export function CompanyLayout() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/invoices">
-                      <ReceiptText />
-                      <span>Factures</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <NavLink to="/invoices">
+                    {({ isActive }) => (
+                      <SidebarMenuButton isActive={isActive}>
+                        <ReceiptText />
+                        <span>Factures</span>
+                      </SidebarMenuButton>
+                    )}
+                  </NavLink>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/articles">
-                      <Archive />
-                      <span>Articles</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <NavLink to="/articles">
+                    {({ isActive }) => (
+                      <SidebarMenuButton isActive={isActive}>
+                        <Archive />
+                        <span>Articles</span>
+                      </SidebarMenuButton>
+                    )}
+                  </NavLink>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/contacts">
-                      <BookUser />
-                      <span>Contacts</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <NavLink to="/contacts">
+                    {({ isActive }) => (
+                      <SidebarMenuButton isActive={isActive}>
+                        <BookUser />
+                        <span>Contacts</span>
+                      </SidebarMenuButton>
+                    )}
+                  </NavLink>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/categories">
-                      <Tag />
-                      <span>Catégories</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <NavLink to="/categories">
+                    {({ isActive }) => (
+                      <SidebarMenuButton isActive={isActive}>
+                        <Tag />
+                        <span>Catégories</span>
+                      </SidebarMenuButton>
+                    )}
+                  </NavLink>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/taxes">
-                      <Percent />
-                      <span>Taxes</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <NavLink to="/taxes">
+                    {({ isActive }) => (
+                      <SidebarMenuButton isActive={isActive}>
+                        <Percent />
+                        <span>Taxes</span>
+                      </SidebarMenuButton>
+                    )}
+                  </NavLink>
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
