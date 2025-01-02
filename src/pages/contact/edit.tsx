@@ -1,9 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { useFormik } from "formik";
-import { ContactTypeEnum, UpdateContactPayloadType } from "@/types";
-import { object, string } from "yup";
-import { ContactForm } from "./form";
+import { UpdateContactPayloadType } from "@/types";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ContactApiService } from "@/services/contact-api";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(Object.values(ContactTypeEnum)).required("Obligatoire"),
-});
+import { ContactForm, validationSchema } from "./form";
 
 export function ContactEditPage() {
   const { contactId } = useParams();

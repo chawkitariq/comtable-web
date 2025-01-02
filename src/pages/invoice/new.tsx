@@ -1,19 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import { CreateDocumentPayloadType } from "@/types";
-import { number, object, string } from "yup";
 import { useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
 import { DocumentInvoiceApiService } from "@/services";
-import { InvoiceForm } from "./form";
 import { Button } from "@/components/ui/button";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(["product", "service"]).required("Obligatoire"),
-  salePrice: number().min(0),
-  purchasePrice: number().min(0),
-});
+import { InvoiceForm, validationSchema } from "./form";
 
 export function InvoiceNewPage() {
   const navigate = useNavigate();

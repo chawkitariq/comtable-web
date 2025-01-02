@@ -1,8 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import { TaxTypeEnum, CreateTaxPayloadType } from "@/types";
-import { number, object, string } from "yup";
-import { TaxForm } from "./form";
 import { useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
 import {
@@ -13,13 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { TaxApiService } from "@/services";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(["product", "service"]).required("Obligatoire"),
-  salePrice: number().min(0),
-  purchasePrice: number().min(0),
-});
+import { TaxForm, validationSchema } from "./form";
 
 export function TaxNewPage() {
   const navigate = useNavigate();

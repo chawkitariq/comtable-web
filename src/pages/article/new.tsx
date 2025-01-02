@@ -2,8 +2,7 @@ import { ArticleApiService } from "@/services";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import { ArticleTypeEnum, CreateArticlePayloadType } from "@/types";
-import { number, object, string } from "yup";
-import { ArticleForm } from "./form";
+import { ArticleForm, validationSchema } from "./form";
 import { useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
 import {
@@ -13,13 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(["product", "service"]).required("Obligatoire"),
-  salePrice: number().min(0),
-  purchasePrice: number().min(0),
-});
 
 export function ArticleNewPage() {
   const navigate = useNavigate();

@@ -3,8 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { useFormik } from "formik";
 import { CreateTaxPayloadType, UpdateTaxPayloadType } from "@/types";
-import { number, object, string } from "yup";
-import { TaxForm } from "./form";
 import { useSessionStore } from "@/stores";
 import {
   Dialog,
@@ -13,13 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(["product", "service"]).required("Obligatoire"),
-  salePrice: number().min(0),
-  purchasePrice: number().min(0),
-});
+import { TaxForm, validationSchema } from "./form";
 
 export function TaxCopyPage() {
   const { taxId } = useParams();
@@ -39,10 +31,7 @@ export function TaxCopyPage() {
   const { mutate: updateTax } = useMutation({
     mutationKey: ["taxs", taxId],
     mutationFn: (payload: UpdateTaxPayloadType) => {
-      return TaxApiService.create(
-        company.id!,
-        payload as CreateTaxPayloadType
-      );
+      return TaxApiService.create(company.id!, payload as CreateTaxPayloadType);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["taxs"] });

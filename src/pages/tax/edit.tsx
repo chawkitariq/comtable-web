@@ -1,9 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { useFormik } from "formik";
-import { TaxTypeEnum, UpdateTaxPayloadType } from "@/types";
-import { object, string } from "yup";
-import { TaxForm } from "./form";
+import { UpdateTaxPayloadType } from "@/types";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { TaxApiService } from "@/services";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(Object.values(TaxTypeEnum)).required("Obligatoire"),
-});
+import { TaxForm, validationSchema } from "./form";
 
 export function TaxEditPage() {
   const { taxId } = useParams();

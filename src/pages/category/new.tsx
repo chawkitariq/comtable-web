@@ -1,8 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import { CategoryTypeEnum, CreateCategoryPayloadType } from "@/types";
-import { number, object, string } from "yup";
-import { CategoryForm } from "./form";
 import { useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
 import {
@@ -13,13 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CategoryApiService } from "@/services";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(["product", "service"]).required("Obligatoire"),
-  salePrice: number().min(0),
-  purchasePrice: number().min(0),
-});
+import { CategoryForm, validationSchema } from "./form";
 
 export function CategoryNewPage() {
   const navigate = useNavigate();

@@ -1,9 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { useFormik } from "formik";
-import { CategoryTypeEnum, UpdateCategoryPayloadType } from "@/types";
-import { object, string } from "yup";
-import { CategoryForm } from "./form";
+import { UpdateCategoryPayloadType } from "@/types";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CategoryApiService } from "@/services";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(Object.values(CategoryTypeEnum)).required("Obligatoire"),
-});
+import { CategoryForm, validationSchema } from "./form";
 
 export function CategoryEditPage() {
   const { categoryId } = useParams();

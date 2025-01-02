@@ -3,8 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { useFormik } from "formik";
 import { CreateCategoryPayloadType, UpdateCategoryPayloadType } from "@/types";
-import { number, object, string } from "yup";
-import { CategoryForm } from "./form";
+import { CategoryForm, validationSchema } from "./form";
 import { useSessionStore } from "@/stores";
 import {
   Dialog,
@@ -13,13 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(["product", "service"]).required("Obligatoire"),
-  salePrice: number().min(0),
-  purchasePrice: number().min(0),
-});
 
 export function CategoryCopyPage() {
   const { categoryId } = useParams();

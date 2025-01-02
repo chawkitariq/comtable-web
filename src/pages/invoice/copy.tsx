@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { useFormik } from "formik";
-import { object } from "yup";
 import { useSessionStore } from "@/stores";
 import {
   Dialog,
@@ -12,9 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { CreateDocumentPayloadType } from "@/types";
 import { DocumentInvoiceApiService } from "@/services";
-import { InvoiceForm } from "./form";
-
-const validationSchema = object().shape({});
+import { InvoiceForm, validationSchema } from "./form";
 
 export function InvoiceCopyPage() {
   const { invoiceId } = useParams();

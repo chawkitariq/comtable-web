@@ -2,13 +2,7 @@ import { ContactApiService } from "@/services";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { useFormik } from "formik";
-import {
-  ContactTypeEnum,
-  CreateContactPayloadType,
-  UpdateContactPayloadType,
-} from "@/types";
-import { number, object, string } from "yup";
-import { ContactForm } from "./form";
+import { CreateContactPayloadType, UpdateContactPayloadType } from "@/types";
 import { useSessionStore } from "@/stores";
 import {
   Dialog,
@@ -17,13 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(["product", "service"]).required("Obligatoire"),
-  salePrice: number().min(0),
-  purchasePrice: number().min(0),
-});
+import { ContactForm, validationSchema } from "./form";
 
 export function ContactCopyPage() {
   const { contactId } = useParams();
@@ -57,9 +45,7 @@ export function ContactCopyPage() {
   const form = useFormik<UpdateContactPayloadType>({
     initialValues: {
       name: contact?.name,
-      type: contact?.type as ContactTypeEnum,
-      salePrice: contact?.salePrice,
-      purchasePrice: contact?.purchasePrice,
+      type: contact?.type,
     },
     validationSchema,
     onSubmit: (values) => updateContact(values),

@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { useFormik } from "formik";
 import { UpdateDocumentPayloadType } from "@/types";
-import { number, object, string } from "yup";
 import {
   Dialog,
   DialogContent,
@@ -10,15 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { InvoiceForm } from "./form";
 import { DocumentInvoiceApiService } from "@/services";
-
-const validationSchema = object().shape({
-  name: string().required("Obligatoire"),
-  type: string().oneOf(["product", "service"]).required("Obligatoire"),
-  salePrice: number().min(0),
-  purchasePrice: number().min(0),
-});
+import { InvoiceForm, validationSchema } from "./form";
 
 export function InvoiceEditPage() {
   const { invoiceId } = useParams();
