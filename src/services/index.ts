@@ -4,4 +4,5 @@ export * from "./category-api";
 export * from "./company-api";
 export * from "./contact-api";
 export * from "./document-invoice-api";
+export * from "./tax-api";
 export * from "./user-api";

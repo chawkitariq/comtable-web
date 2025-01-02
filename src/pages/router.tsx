@@ -3,6 +3,7 @@ import { DashboardIndexPage } from "./dashboard";
 import { Authenticable } from "@/components";
 import { LoginPage, RegisterPage } from "./authentication";
 import { DashboardLayout, DefaultLayout } from "@/layouts";
+import { TaxCopyPage, TaxEditPage, TaxNewPage, TaxRootPage } from "./tax";
 import { RootPage } from ".";
 import {
   ArticleEditPage,
@@ -62,6 +63,12 @@ export function Router() {
               <Route path="new" element={<CategoryNewPage />} />
               <Route path=":categoryId/edit" element={<CategoryEditPage />} />
               <Route path=":categoryId/copy" element={<CategoryCopyPage />} />
+            </Route>
+
+            <Route path="taxes" element={<TaxRootPage />}>
+              <Route path="new" element={<TaxNewPage />} />
+              <Route path=":taxId/edit" element={<TaxEditPage />} />
+              <Route path=":taxId/copy" element={<TaxCopyPage />} />
             </Route>
 
             <Route path="invoices" element={<InvoiceRootPage />} />

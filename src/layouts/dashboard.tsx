@@ -25,10 +25,11 @@ import { useQuery } from "@tanstack/react-query";
 import {
   Archive,
   BookUser,
-  ChartBarStacked,
   ChevronsUpDown,
+  Percent,
   Plus,
   ReceiptText,
+  Tag,
 } from "lucide-react";
 import React from "react";
 import { Link, Outlet } from "react-router";
@@ -127,8 +128,16 @@ export function DashboardLayout() {
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <Link to="/categories">
-                      <ChartBarStacked />
+                      <Tag />
                       <span>Catégories</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/taxes">
+                      <Percent />
+                      <span>Taxes</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
