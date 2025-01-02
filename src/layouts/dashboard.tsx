@@ -29,6 +29,7 @@ import {
   Archive,
   BadgeCheck,
   BookUser,
+  ChartBarStacked,
   ChevronsUpDown,
   LogOut,
   Plus,
@@ -118,6 +119,14 @@ export function DashboardLayout() {
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
+                    <Link to="/invoices">
+                      <ReceiptText />
+                      <span>Factures</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
                     <Link to="/contacts">
                       <BookUser />
                       <span>Contacts</span>
@@ -126,9 +135,9 @@ export function DashboardLayout() {
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <Link to="/invoices">
-                      <ReceiptText />
-                      <span>Factures</span>
+                    <Link to="/categories">
+                      <ChartBarStacked />
+                      <span>Catégories</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -22,6 +22,12 @@ import {
   ContactNewPage,
   ContactRootPage,
 } from "./contact";
+import {
+  CategoryCopyPage,
+  CategoryEditPage,
+  CategoryNewPage,
+  CategoryRootPage,
+} from "./category";
 
 export function Router() {
   return (
@@ -50,6 +56,12 @@ export function Router() {
               <Route path="new" element={<ContactNewPage />} />
               <Route path=":contactId/edit" element={<ContactEditPage />} />
               <Route path=":contactId/copy" element={<ContactCopyPage />} />
+            </Route>
+
+            <Route path="categories" element={<CategoryRootPage />}>
+              <Route path="new" element={<CategoryNewPage />} />
+              <Route path=":categoryId/edit" element={<CategoryEditPage />} />
+              <Route path=":categoryId/copy" element={<CategoryCopyPage />} />
             </Route>
 
             <Route path="invoices" element={<InvoiceRootPage />} />
