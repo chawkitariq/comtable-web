@@ -22,39 +22,48 @@ export const CategoryForm = forwardRef<HTMLFormElement, CategoryFormProps>(
     const navigate = useNavigate();
 
     return (
-      <form className="grid gap-4" onSubmit={form.handleSubmit} ref={ref}>
+      <form
+        className="grid gap-4 content-between"
+        onSubmit={form.handleSubmit}
+        ref={ref}
+      >
         <div className="grid gap-4">
-          <Label>Type</Label>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.values(CategoryTypeEnum).map((type) => (
-                <SelectItem key={type} value={type}>
-                  {type}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+          <div className="grid gap-4">
+            <Label htmlFor="name">Nom</Label>
+            <Input
+              id="name"
+              name="name"
+              value={form.values.name}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+            />
+          </div>
 
-        <div className="grid gap-4">
-          <Label htmlFor="name">Nom</Label>
-          <Input
-            id="name"
-            name="name"
-            value={form.values.name}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-          />
+          <div className="grid gap-4">
+            <Label>Type</Label>
+            <Select
+              value={form.values.type}
+              onValueChange={(type) => form.setFieldValue("type", type)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Sélectionner un type" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(CategoryTypeEnum).map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="flex justify-end gap-4">
           <Button
             type="button"
             variant="outline"
-            onClick={() => navigate("/categorys")}
+            onClick={() => navigate("/categories")}
           >
             Annuler
           </Button>

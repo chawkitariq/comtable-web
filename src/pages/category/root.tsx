@@ -186,7 +186,7 @@ export function CategoryRootPage() {
       <div className="grid gap-4">
         <div className="flex">
           <Button
-            onClick={() => navigate("/categorys/new")}
+            onClick={() => navigate("/categories/new")}
             className="ml-auto"
           >
             Nouveau

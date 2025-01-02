@@ -2,11 +2,7 @@ import { CategoryApiService } from "@/services";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { useFormik } from "formik";
-import {
-  CategoryTypeEnum,
-  CreateCategoryPayloadType,
-  UpdateCategoryPayloadType,
-} from "@/types";
+import { CreateCategoryPayloadType, UpdateCategoryPayloadType } from "@/types";
 import { number, object, string } from "yup";
 import { CategoryForm } from "./form";
 import { useSessionStore } from "@/stores";
@@ -50,14 +46,14 @@ export function CategoryCopyPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categorys"] });
-      navigate("/categorys");
+      navigate("/categories");
     },
   });
 
   const form = useFormik<UpdateCategoryPayloadType>({
     initialValues: {
       name: category?.name,
-      type: category?.type as CategoryTypeEnum,
+      type: category?.type,
     },
     validationSchema,
     onSubmit: (values) => updateCategory(values),
@@ -65,9 +61,9 @@ export function CategoryCopyPage() {
   });
 
   return (
-    <Dialog open={true} onOpenChange={() => navigate("/categorys")}>
+    <Dialog open={true} onOpenChange={() => navigate("/categories")}>
       <DialogContent
-        className="h-[90vh] min-w-[35vw] overflow-y-auto"
+        className="h-[90vh] min-w-[35vw] overflow-y-auto grid grid-rows-[auto_1fr]"
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
