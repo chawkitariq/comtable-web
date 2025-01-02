@@ -30,6 +30,7 @@ import {
   CategoryNewPage,
   CategoryRootPage,
 } from "./category";
+import { UserRootPage } from "./user";
 
 export function Router() {
   return (
@@ -43,6 +44,8 @@ export function Router() {
               <Route path="new" element={<CompanyNewPage />} />
               <Route path=":companyId/edit" element={<CompanyEditPage />} />
             </Route>
+
+            <Route path="users" element={<UserRootPage />} />
           </Route>
 
           <Route element={<CompanyLayout />}>
