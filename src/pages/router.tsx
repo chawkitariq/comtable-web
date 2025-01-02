@@ -2,20 +2,26 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { DashboardIndexPage } from "./dashboard";
 import { Authenticable } from "@/components";
 import { LoginPage, RegisterPage } from "./authentication";
+import { DashboardLayout, DefaultLayout } from "@/layouts";
+import { RootPage } from ".";
 import {
   ArticleEditPage,
   ArticleRootPage,
   ArticleNewPage,
   ArticleCopyPage,
 } from "./article";
-import { RootPage } from ".";
-import { DashboardLayout, DefaultLayout } from "@/layouts";
 import {
   InvoiceCopyPage,
   InvoiceEditPage,
   InvoiceNewPage,
   InvoiceRootPage,
 } from "./invoice";
+import {
+  ContactCopyPage,
+  ContactEditPage,
+  ContactNewPage,
+  ContactRootPage,
+} from "./contact";
 
 export function Router() {
   return (
@@ -38,6 +44,12 @@ export function Router() {
               <Route path="new" element={<ArticleNewPage />} />
               <Route path=":articleId/edit" element={<ArticleEditPage />} />
               <Route path=":articleId/copy" element={<ArticleCopyPage />} />
+            </Route>
+
+            <Route path="contacts" element={<ContactRootPage />}>
+              <Route path="new" element={<ContactNewPage />} />
+              <Route path=":contactId/edit" element={<ContactEditPage />} />
+              <Route path=":contactId/copy" element={<ContactCopyPage />} />
             </Route>
 
             <Route path="invoices" element={<InvoiceRootPage />} />

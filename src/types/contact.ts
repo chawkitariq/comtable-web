@@ -4,7 +4,7 @@ import { UserType } from "./user";
 export type ContactType = {
   id: string;
   name: string;
-  type: string;
+  type: ContactTypeEnum;
   email?: string;
   taxNumber?: string;
   phone?: string;
@@ -23,7 +23,7 @@ export type ContactType = {
 
 export type CreateContactPayloadType = {
   name: string;
-  type: string;
+  type: ContactTypeEnum;
   email?: string;
   taxNumber?: string;
   phone?: string;
@@ -37,3 +37,8 @@ export type CreateContactPayloadType = {
 };
 
 export type UpdateContactPayloadType = Partial<CreateContactPayloadType>;
+
+export enum ContactTypeEnum {
+  Customer = "customer",
+  Supplier = "supplier",
+}

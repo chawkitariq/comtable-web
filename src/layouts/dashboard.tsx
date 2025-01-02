@@ -28,6 +28,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   Archive,
   BadgeCheck,
+  BookUser,
   ChevronsUpDown,
   LogOut,
   Plus,
@@ -112,6 +113,14 @@ export function DashboardLayout() {
                     <Link to="/articles">
                       <Archive />
                       <span>Articles</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/contacts">
+                      <BookUser />
+                      <span>Contacts</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
