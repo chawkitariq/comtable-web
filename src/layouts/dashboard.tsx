@@ -1,8 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -11,7 +9,6 @@ import {
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -23,15 +20,13 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { CompanyApiService } from "@/services/company-api";
-import { useAuthenticationStore, useSessionStore } from "@/stores";
+import { useSessionStore } from "@/stores";
 import { useQuery } from "@tanstack/react-query";
 import {
   Archive,
-  BadgeCheck,
   BookUser,
   ChartBarStacked,
   ChevronsUpDown,
-  LogOut,
   Plus,
   ReceiptText,
 } from "lucide-react";
@@ -39,16 +34,12 @@ import React from "react";
 import { Link, Outlet } from "react-router";
 
 export function DashboardLayout() {
-  const { logout } = useAuthenticationStore();
-
   const { company: sessionCompany, setCompany } = useSessionStore();
 
   const { data: companies } = useQuery({
     queryKey: ["companies"],
     queryFn: CompanyApiService.findAll,
   });
-
-  const { me } = useAuthenticationStore();
 
   return (
     <SidebarProvider>
@@ -145,67 +136,6 @@ export function DashboardLayout() {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton
-                    size="lg"
-                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                  >
-                    <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage
-                        src="https://i.pravatar.cc/300"
-                        alt={me.email}
-                      />
-                      <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                    </Avatar>
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">{me.email}</span>
-                      <span className="truncate text-xs">{me.email}</span>
-                    </div>
-                    <ChevronsUpDown className="ml-auto size-4" />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                  align="end"
-                  sideOffset={4}
-                >
-                  <DropdownMenuLabel className="p-0 font-normal">
-                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                      <Avatar className="h-8 w-8 rounded-lg">
-                        <AvatarImage src={me.email} alt={me.email} />
-                        <AvatarFallback className="rounded-lg">
-                          CN
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">
-                          {me.email}
-                        </span>
-                        <span className="truncate text-xs">{me.email}</span>
-                      </div>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <BadgeCheck />
-                      Account
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-red-500" onClick={logout}>
-                    <LogOut />
-                    Déconnexion
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <SidebarTrigger />
