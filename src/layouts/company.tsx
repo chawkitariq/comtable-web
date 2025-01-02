@@ -9,6 +9,7 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -25,16 +26,17 @@ import { useQuery } from "@tanstack/react-query";
 import {
   Archive,
   BookUser,
+  ChevronLeft,
   ChevronsUpDown,
   Percent,
   Plus,
   ReceiptText,
   Tag,
 } from "lucide-react";
-import React from "react";
+import React, { useMemo } from "react";
 import { Link, Outlet } from "react-router";
 
-export function DashboardLayout() {
+export function CompanyLayout() {
   const { company: sessionCompany, setCompany } = useSessionStore();
 
   const { data: companies } = useQuery({
@@ -42,13 +44,18 @@ export function DashboardLayout() {
     queryFn: CompanyApiService.findAll,
   });
 
+  const isGreaterThanOneCompany = useMemo(
+    () => (companies?.length as number) > 1,
+    [companies]
+  );
+
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <DropdownMenu>
+              <DropdownMenu open={isGreaterThanOneCompany}>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton
                     size="lg"
@@ -59,7 +66,9 @@ export function DashboardLayout() {
                         {sessionCompany.name}
                       </span>
                     </div>
-                    <ChevronsUpDown className="ml-auto" />
+                    {isGreaterThanOneCompany && (
+                      <ChevronsUpDown className="ml-auto" />
+                    )}
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
@@ -145,6 +154,18 @@ export function DashboardLayout() {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to="/">
+                  <ChevronLeft />
+                  Accueil
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <SidebarTrigger />

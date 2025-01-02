@@ -1,9 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 
 import { Authenticable } from "@/components";
-import { DashboardLayout } from "@/layouts";
+import { CompanyLayout, DefaultLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "./authentication";
-import { DashboardIndexPage } from "./dashboard";
 import { CompanyEditPage, CompanyNewPage, CompanyRootPage } from "./company";
 import { TaxCopyPage, TaxEditPage, TaxNewPage, TaxRootPage } from "./tax";
 import { RootPage } from ".";
@@ -37,11 +36,16 @@ export function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Authenticable />}>
-          <Route index element={<RootPage />} />
+          <Route element={<DefaultLayout />}>
+            <Route index element={<RootPage />} />
 
-          <Route element={<DashboardLayout />}>
-            <Route path="dashboard" element={<DashboardIndexPage />} />
+            <Route path="companies" element={<CompanyRootPage />}>
+              <Route path="new" element={<CompanyNewPage />} />
+              <Route path=":companyId/edit" element={<CompanyEditPage />} />
+            </Route>
+          </Route>
 
+          <Route element={<CompanyLayout />}>
             <Route path="articles" element={<ArticleRootPage />}>
               <Route path="new" element={<ArticleNewPage />} />
               <Route path=":articleId/edit" element={<ArticleEditPage />} />
@@ -73,11 +77,6 @@ export function Router() {
             <Route path="new" element={<InvoiceNewPage />} />
             <Route path=":invoiceId/edit" element={<InvoiceEditPage />} />
             <Route path=":invoiceId/copy" element={<InvoiceCopyPage />} />
-          </Route>
-
-          <Route path="companies" element={<CompanyRootPage />}>
-            <Route path="new" element={<CompanyNewPage />} />
-            <Route path=":companyId/edit" element={<CompanyEditPage />} />
           </Route>
         </Route>
 

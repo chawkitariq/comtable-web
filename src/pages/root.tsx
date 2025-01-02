@@ -26,7 +26,7 @@ export function RootPage() {
   const handleSwitchCompany = useCallback(
     (company: CompanyType) => {
       setCompany(company);
-      navigate("/dashboard");
+      navigate("/articles");
     },
     [navigate, setCompany]
   );
