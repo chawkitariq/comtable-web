@@ -115,12 +115,12 @@ export type CreateDocumentPayloadType = {
 };
 
 export type CreateDocumentArticlePayloadType = {
-  name: string;
-  type: string;
-  quantity: number;
-  price: number;
-  tax: number;
-  total: string;
+  name?: string;
+  type?: string;
+  quantity?: number;
+  price?: number;
+  tax?: number;
+  total?: string;
   taxes?: CreateDocumentArticleTaxPayloadType[];
 };
 

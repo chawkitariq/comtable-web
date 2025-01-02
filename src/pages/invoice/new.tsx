@@ -34,7 +34,9 @@ export function InvoiceNewPage() {
   });
 
   const form = useFormik<CreateDocumentPayloadType>({
-    initialValues: {},
+    initialValues: {
+      articles: [],
+    },
     validationSchema,
     onSubmit: (values) => createInvoice(values),
   });

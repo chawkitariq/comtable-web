@@ -8,8 +8,9 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const accessToken = useAuthenticationStore.getState().accessToken;
-  const tokenType = useAuthenticationStore.getState().tokenType;
+  const authenticationStore = useAuthenticationStore.getState();
+  const accessToken = authenticationStore.accessToken;
+  const tokenType = authenticationStore.tokenType;
 
   if (accessToken) {
     config["headers"]["Authorization"] = `${tokenType} ${accessToken}`;
@@ -17,5 +18,16 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      useAuthenticationStore.getState().logout();
+    }
+
+    return error;
+  }
+);
 
 export { api };

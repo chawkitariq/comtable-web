@@ -16,8 +16,8 @@ const validationSchema = object().shape({
 export function RegisterPage() {
   const navigate = useNavigate();
 
-  const { mutate: createArticle } = useMutation({
-    mutationKey: ["articles"],
+  const { mutate: register } = useMutation({
+    mutationKey: ["register"],
     mutationFn: AuthenticationApiService.register,
     onSuccess: () => navigate("/login"),
   });
@@ -28,7 +28,7 @@ export function RegisterPage() {
       password: "",
     },
     validationSchema,
-    onSubmit: (values) => createArticle(values),
+    onSubmit: (values) => register(values),
   });
 
   return (

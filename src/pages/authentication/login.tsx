@@ -19,8 +19,8 @@ export function LoginPage() {
 
   const { login } = useAuthenticationStore();
 
-  const { mutate: createArticle } = useMutation({
-    mutationKey: ["articles"],
+  const { mutate: handleLogin } = useMutation({
+    mutationKey: ["login"],
     mutationFn: AuthenticationApiService.login,
     onSuccess: (response) => {
       login(response);
@@ -34,7 +34,7 @@ export function LoginPage() {
       password: "",
     },
     validationSchema,
-    onSubmit: (values) => createArticle(values),
+    onSubmit: (values) => handleLogin(values),
   });
 
   return (
