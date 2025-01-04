@@ -1,13 +1,14 @@
-import { ArticleType } from "./article";
+import { ArticleType, ArticleTypeEnum } from "./article";
 import { CompanyType } from "./company";
+import { TaxTypeEnum } from "./tax";
 import { UserType } from "./user";
 
 export type DocumentType = {
   id: string;
   number: string;
   orderNumber?: string;
-  type: string;
-  status: string;
+  type: DocumentTypeEnum;
+  status: DocumentStatusEnum;
   issuedAt: Date;
   dueAt: Date;
   currencyCode?: string;
@@ -39,7 +40,7 @@ export type DocumentType = {
 export type DocumentArticleType = {
   id: string;
   name: string;
-  type: string;
+  type: ArticleTypeEnum;
   description?: string;
   sku?: string;
   quantity: number;
@@ -60,7 +61,7 @@ export type DocumentArticleType = {
 export type DocumentArticleTaxType = {
   id: string;
   name: string;
-  type: string;
+  type: TaxTypeEnum;
   amount: number;
   company?: CompanyType;
   document?: DocumentType;
@@ -91,8 +92,8 @@ export type DocumentTotalType = {
 export type CreateDocumentPayloadType = {
   number?: string;
   orderNumber?: string;
-  type?: string;
-  status?: string;
+  type?: DocumentTypeEnum;
+  status?: DocumentStatusEnum;
   issuedAt?: Date;
   dueAt?: Date;
   currencyCode?: string;
@@ -116,7 +117,7 @@ export type CreateDocumentPayloadType = {
 
 export type CreateDocumentArticlePayloadType = {
   name?: string;
-  type?: string;
+  type?: ArticleTypeEnum;
   quantity?: number;
   price?: number;
   tax?: number;
@@ -126,7 +127,7 @@ export type CreateDocumentArticlePayloadType = {
 
 export type CreateDocumentArticleTaxPayloadType = {
   name: string;
-  type: string;
+  type: TaxTypeEnum;
   amount: number;
 };
 
@@ -134,7 +135,6 @@ export type UpdateDocumentPayloadType = Omit<
   Partial<CreateDocumentPayloadType>,
   "articles"
 > & {
-  id: string;
   articles?: UpdateDocumentArticlePayloadType[];
 };
 
@@ -150,3 +150,19 @@ export type UpdateDocumentArticleTaxPayloadType =
   Partial<CreateDocumentArticleTaxPayloadType> & {
     id: string;
   };
+
+export enum DocumentTypeEnum {
+  Invoice = "invoice",
+  Bill = "bill",
+}
+
+export enum DocumentStatusEnum {
+  Draft = "draft",
+  Paid = "paid",
+  Partial = "partial",
+  Sent = "sent",
+  Received = "received",
+  Viewed = "viewed",
+  Cancelled = "cancelled",
+  Archived = "archived",
+}

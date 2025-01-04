@@ -1,3 +1,4 @@
+import { InputCalendar } from "@/components";
 import { Combobox } from "@/components/customs/combobox";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +25,7 @@ import {
 } from "@/components/ui/table";
 import { ContactApiService } from "@/services/contact-api";
 import { useSessionStore } from "@/stores";
-import { CreateDocumentPayloadType } from "@/types";
+import { ArticleTypeEnum, CreateDocumentPayloadType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import {
@@ -42,6 +43,7 @@ interface InvoiceFormProps {
 
 export const InvoiceForm = ({ form }: InvoiceFormProps) => {
   const [isContactFormVisible, setIsContactFormVisible] = useState(false);
+  const [selectedContactId, setSelectedContactId] = useState("");
 
   const { company } = useSessionStore();
 
@@ -55,6 +57,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
 
   const handleSelectedContact = useCallback(
     (contactId: string) => {
+      setSelectedContactId(contactId);
       const contact = contacts?.find(({ id }) => id === contactId);
       form.setFieldValue("contactName", contact?.name);
       form.setFieldValue("contactEmail", contact?.email);
@@ -69,7 +72,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
   );
 
   return (
-    <div className="grid gap-4 h-fit">
+    <div className="grid gap-4">
       <Collapsible
         open={isContactFormVisible}
         onOpenChange={setIsContactFormVisible}
@@ -87,7 +90,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
             <div className="grid gap-2">
               <Label>Contact</Label>
               <Combobox
-                value="sdf"
+                value={selectedContactId}
                 onSelect={handleSelectedContact}
                 items={items.map((contact) => ({
                   label: contact.name,
@@ -95,7 +98,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                 }))}
               />
             </div>
-            <CollapsibleContent className="grid grid-cols-2 gap-4">
+            <CollapsibleContent className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="number">Nom</Label>
                 <Input
@@ -220,25 +223,21 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="issuedAt">Date d'émission</Label>
-              <Input
-                id="issuedAt"
-                name="issuedAt"
-                type="datetime-local"
-                value={form.values.issuedAt?.toISOString()}
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
+              <InputCalendar
+                value={form.values.issuedAt}
+                onChange={(issuedAt) =>
+                  form.setFieldValue("issuedAt", issuedAt)
+                }
+                onBlur={() => form.setFieldTouched("issuedAt", true)}
               />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="dueAt">Date d'échéance</Label>
-              <Input
-                id="dueAt"
-                name="dueAt"
-                type="datetime-local"
-                value={form.values.dueAt?.toISOString()}
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
+              <InputCalendar
+                value={form.values.dueAt}
+                onChange={(dueAt) => form.setFieldValue("dueAt", dueAt)}
+                onBlur={() => form.setFieldTouched("dueAt", true)}
               />
             </div>
           </div>
@@ -315,7 +314,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                             />
                           </TableCell>
                           <TableCell>
-                            <Button size="icon" variant="ghost">
+                            <Button type="button" size="icon" variant="ghost">
                               <Trash2 />
                             </Button>
                           </TableCell>
@@ -326,6 +325,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                 </CardContent>
                 <CardFooter className="grid place-items-end">
                   <Button
+                    type="button"
                     variant="ghost"
                     onClick={() =>
                       push({
@@ -333,6 +333,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                         price: 0,
                         quantity: 0,
                         total: 0,
+                        type: ArticleTypeEnum.Product,
                       })
                     }
                   >

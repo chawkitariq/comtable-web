@@ -5,9 +5,8 @@ import { useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
 import { DocumentInvoiceApiService } from "@/services";
 import { Button } from "@/components/ui/button";
-import { InvoiceForm, validationSchema } from "./form";
+import { InvoiceForm } from "./form";
 import { InvoiceDefaultTemplate } from "@/components/invoice-template";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function InvoiceNewPage() {
@@ -32,17 +31,14 @@ export function InvoiceNewPage() {
     initialValues: {
       articles: [],
     },
-    validationSchema,
+    // validationSchema,
     onSubmit: (values) => createInvoice(values),
   });
 
   return (
     <main className="grid grid-cols-[auto_65%] gap-4 p-4">
       <ScrollArea className="h-[90vh] pr-4">
-        <form
-          onSubmit={form.handleSubmit}
-          className="grid grid-rows-3 gap-4"
-        >
+        <form onSubmit={form.handleSubmit} className="grid grid-rows-3 gap-4">
           <InvoiceForm form={form} />
           <div className="flex justify-end gap-4">
             <Button
@@ -57,12 +53,9 @@ export function InvoiceNewPage() {
         </form>
       </ScrollArea>
       <div>
-        <AspectRatio
-          ratio={19 / 16}
-          className="w-[70%] flex justify-center items-center mx-auto"
-        >
+        <div className="flex justify-center items-center mx-auto">
           <InvoiceDefaultTemplate invoice={form.values as DocumentType} />
-        </AspectRatio>
+        </div>
       </div>
     </main>
   );

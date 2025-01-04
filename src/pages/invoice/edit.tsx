@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { DocumentInvoiceApiService } from "@/services";
 import { InvoiceForm, validationSchema } from "./form";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { InvoiceDefaultTemplate } from "@/components";
 
 export function InvoiceEditPage() {
   const { invoiceId } = useParams();
@@ -37,7 +40,28 @@ export function InvoiceEditPage() {
   });
 
   const form = useFormik<UpdateDocumentPayloadType>({
-    initialValues: invoice!,
+    initialValues: {
+      number: invoice?.number ?? undefined,
+      orderNumber: invoice?.orderNumber ?? undefined,
+      issuedAt: invoice?.issuedAt ? new Date(invoice?.issuedAt) : undefined,
+      dueAt: invoice?.dueAt ? new Date(invoice?.dueAt) : undefined,
+      contactName: invoice?.contactName ?? undefined,
+      contactEmail: invoice?.contactEmail ?? undefined,
+      contactPhone: invoice?.contactPhone ?? undefined,
+      contactAddress: invoice?.contactAddress ?? undefined,
+      contactCity: invoice?.contactCity ?? undefined,
+      contactPostalCode: invoice?.contactPostalCode ?? undefined,
+      contactState: invoice?.contactState ?? undefined,
+      contactCountry: invoice?.contactCountry ?? undefined,
+      articles:
+        invoice?.articles?.map((article) => ({
+          id: article?.id ?? undefined,
+          name: article?.name ?? undefined,
+          quantity: article?.quantity ?? undefined,
+          price: article?.price ?? undefined,
+          total: article?.total ?? undefined,
+        })) ?? undefined,
+    },
     validationSchema,
     onSubmit: (values) => updateInvoice(values),
     enableReinitialize: true,
@@ -45,12 +69,38 @@ export function InvoiceEditPage() {
 
   return (
     <Dialog open={true} onOpenChange={() => navigate("/invoices")}>
-      <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent
+        className="min-w-[90vw] max-h-[95vh]"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>Edition</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <InvoiceForm form={form} />
+        <main className="grid grid-cols-[auto_60%] gap-4">
+          <ScrollArea className="max-h-[90vh]">
+            <form onSubmit={form.handleSubmit} className="grid gap-4">
+              <InvoiceForm form={form} />
+              <div className="flex justify-end gap-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => navigate("/invoices")}
+                >
+                  Annuler
+                </Button>
+                <Button type="submit">Confirmer</Button>
+              </div>
+            </form>
+          </ScrollArea>
+          <div>
+            <div className="flex justify-center items-center mx-auto">
+              <InvoiceDefaultTemplate
+                invoice={form.values as unknown as DocumentType}
+              />
+            </div>
+          </div>
+        </main>
       </DialogContent>
     </Dialog>
   );
