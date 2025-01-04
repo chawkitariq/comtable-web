@@ -3,25 +3,46 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { ContactApiService } from "@/services/contact-api";
 import { useSessionStore } from "@/stores";
 import { CreateDocumentPayloadType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { FieldArray, FormikProvider, useFormik } from "formik";
-import { Plus, Trash2 } from "lucide-react";
-import { useMemo } from "react";
+import {
+  ChevronDown,
+  ChevronUp,
+  GripVertical,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
 
 interface InvoiceFormProps {
   form: ReturnType<typeof useFormik<CreateDocumentPayloadType>>;
 }
 
 export const InvoiceForm = ({ form }: InvoiceFormProps) => {
+  const [isContactFormVisible, setIsContactFormVisible] = useState(false);
+
   const { company } = useSessionStore();
 
   const { data: contacts } = useQuery({
@@ -32,147 +53,297 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
 
   const items = useMemo(() => contacts ?? [], [contacts]);
 
+  const handleSelectedContact = useCallback(
+    (contactId: string) => {
+      const contact = contacts?.find(({ id }) => id === contactId);
+      form.setFieldValue("contactName", contact?.name);
+      form.setFieldValue("contactEmail", contact?.email);
+      form.setFieldValue("contactPhone", contact?.phone);
+      form.setFieldValue("contactAddress", contact?.address);
+      form.setFieldValue("contactCity", contact?.city);
+      form.setFieldValue("contactPostalCode", contact?.postalCode);
+      form.setFieldValue("contactState", contact?.state);
+      form.setFieldValue("contactCountry", contact?.country);
+    },
+    [contacts, form]
+  );
+
   return (
-    <>
-      <div className="grid gap-4">
-        <Label htmlFor="number">Contact</Label>
-        <Combobox
-          value="sdf"
-          onSelect={console.log}
-          items={items.map((contact) => ({
-            label: contact.name,
-            value: contact.id,
-          }))}
-        />
-      </div>
+    <div className="grid gap-4 h-fit">
+      <Collapsible
+        open={isContactFormVisible}
+        onOpenChange={setIsContactFormVisible}
+      >
+        <Card>
+          <CardHeader className="flex flex-row justify-between items-center gap-2">
+            <CardTitle>Contact</CardTitle>
+            <CollapsibleTrigger asChild>
+              <Button size="icon" variant="ghost">
+                {!isContactFormVisible ? <ChevronDown /> : <ChevronUp />}
+              </Button>
+            </CollapsibleTrigger>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid gap-2">
+              <Label>Contact</Label>
+              <Combobox
+                value="sdf"
+                onSelect={handleSelectedContact}
+                items={items.map((contact) => ({
+                  label: contact.name,
+                  value: contact.id,
+                }))}
+              />
+            </div>
+            <CollapsibleContent className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="number">Nom</Label>
+                <Input
+                  id="contactName"
+                  name="contactName"
+                  value={form.values.contactName}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
 
-      <div className="grid gap-4">
-        <Label htmlFor="number">Numéro de facturation</Label>
-        <Input
-          id="number"
-          name="number"
-          value={form.values.number}
-          onChange={form.handleChange}
-          onBlur={form.handleBlur}
-        />
-      </div>
+              <div className="grid gap-2">
+                <Label htmlFor="contactEmail">Email</Label>
+                <Input
+                  id="contactEmail"
+                  name="contactEmail"
+                  value={form.values.contactEmail}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
 
-      <div className="grid gap-4">
-        <Label htmlFor="orderNumber">Numéro de commande</Label>
-        <Input
-          id="orderNumber"
-          name="orderNumber"
-          value={form.values.orderNumber}
-          onChange={form.handleChange}
-          onBlur={form.handleBlur}
-        />
-      </div>
+              <div className="grid gap-2">
+                <Label htmlFor="contactPhone">Téléphone</Label>
+                <Input
+                  id="contactPhone"
+                  name="contactPhone"
+                  value={form.values.contactPhone}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
 
-      <div className="grid gap-4">
-        <Label htmlFor="issuedAt">Prix de vente</Label>
-        <Input
-          id="issuedAt"
-          name="issuedAt"
-          type="datetime-local"
-          value={form.values.issuedAt?.toISOString()}
-          onChange={form.handleChange}
-          onBlur={form.handleBlur}
-        />
-      </div>
+              <div className="grid gap-2">
+                <Label htmlFor="contactAddress">Adresse</Label>
+                <Input
+                  id="contactAddress"
+                  name="contactAddress"
+                  value={form.values.contactAddress}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
 
-      <div className="grid gap-4">
-        <Label htmlFor="dueAt">Prix d'achat</Label>
-        <Input
-          id="dueAt"
-          name="dueAt"
-          type="datetime-local"
-          value={form.values.dueAt?.toISOString()}
-          onChange={form.handleChange}
-          onBlur={form.handleBlur}
-        />
-      </div>
+              <div className="grid gap-2">
+                <Label htmlFor="contactPostalCode">Code postale</Label>
+                <Input
+                  id="contactPostalCode"
+                  name="contactPostalCode"
+                  value={form.values.contactPostalCode}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
 
-      <div className="grid gap-4">
-        <Label htmlFor="issuedAt">Articles</Label>
+              <div className="grid gap-2">
+                <Label htmlFor="contactCity">Ville</Label>
+                <Input
+                  id="contactCity"
+                  name="contactCity"
+                  value={form.values.contactCity}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="contactState">Région</Label>
+                <Input
+                  id="contactState"
+                  name="contactState"
+                  value={form.values.contactState}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="contactCountry">Pays</Label>
+                <Input
+                  id="contactCountry"
+                  name="contactCountry"
+                  value={form.values.contactCountry}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
+            </CollapsibleContent>
+          </CardContent>
+        </Card>
+      </Collapsible>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Facturation</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="number">Numéro de facturation</Label>
+              <Input
+                id="number"
+                name="number"
+                value={form.values.number}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="orderNumber">Numéro de commande</Label>
+              <Input
+                id="orderNumber"
+                name="orderNumber"
+                value={form.values.orderNumber}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="issuedAt">Date d'émission</Label>
+              <Input
+                id="issuedAt"
+                name="issuedAt"
+                type="datetime-local"
+                value={form.values.issuedAt?.toISOString()}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="dueAt">Date d'échéance</Label>
+              <Input
+                id="dueAt"
+                name="dueAt"
+                type="datetime-local"
+                value={form.values.dueAt?.toISOString()}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Articles</CardTitle>
+        </CardHeader>
         <FormikProvider value={form}>
           <FieldArray name="articles">
-            {({ push, remove }) => (
-              <ul className="grid gap-4">
-                {form.values.articles?.map((article, i) => (
-                  <li key={i}>
-                    <Card className="shadow-none">
-                      <CardHeader>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <CardTitle>{article.name}</CardTitle>
-                            <CardDescription></CardDescription>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => remove(i)}
-                          >
-                            <Trash2 />
-                          </Button>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="grid gap-4">
-                        <div className="grid gap-4">
-                          <Label htmlFor={`articles.${i}.name`}>Nom</Label>
-                          <Input
-                            id={`articles.${i}.name`}
-                            name={`articles.${i}.name`}
-                            value={form.values.articles?.[i].name}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                          />
-                        </div>
-                        <div className="grid gap-4">
-                          <Label htmlFor={`articles.${i}.price`}>Prix</Label>
-                          <Input
-                            id={`articles.${i}.price`}
-                            name={`articles.${i}.price`}
-                            value={form.values.articles?.[i].price}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                          />
-                        </div>
-                        <div className="grid gap-4">
-                          <Label htmlFor={`articles.${i}.quantity`}>
-                            Quantité
-                          </Label>
-                          <Input
-                            id={`articles.${i}.quantity`}
-                            name={`articles.${i}.quantity`}
-                            value={form.values.articles?.[i].quantity}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                          />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </li>
-                ))}
-                <li>
+            {({ push }) => (
+              <>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="hover:bg-white grid grid-cols-[auto_3fr_1fr_1fr_1fr_auto]">
+                        <TableHead></TableHead>
+                        <TableHead>Nom</TableHead>
+                        <TableHead>Prix</TableHead>
+                        <TableHead>Quantity</TableHead>
+                        <TableHead>Total</TableHead>
+                        <TableHead></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {form.values.articles?.map((_, i) => (
+                        <TableRow
+                          key={i}
+                          className="hover:bg-white grid grid-cols-[auto_3fr_1fr_1fr_1fr_auto] items-center"
+                        >
+                          <TableCell className="cursor-grab">
+                            <GripVertical />
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              id={`articles.${i}.name`}
+                              name={`articles.${i}.name`}
+                              value={form.values.articles?.[i].name}
+                              onChange={form.handleChange}
+                              onBlur={form.handleBlur}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              type="number"
+                              id={`articles.${i}.price`}
+                              name={`articles.${i}.price`}
+                              value={form.values.articles?.[i].price}
+                              onChange={form.handleChange}
+                              onBlur={form.handleBlur}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              type="number"
+                              id={`articles.${i}.quantity`}
+                              name={`articles.${i}.quantity`}
+                              value={form.values.articles?.[i].quantity}
+                              onChange={form.handleChange}
+                              onBlur={form.handleBlur}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              type="number"
+                              id={`articles.${i}.total`}
+                              name={`articles.${i}.total`}
+                              value={form.values.articles?.[i].total}
+                              onChange={form.handleChange}
+                              onBlur={form.handleBlur}
+                              disabled
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Button size="icon" variant="ghost">
+                              <Trash2 />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+                <CardFooter className="grid place-items-end">
                   <Button
-                    className="w-full"
-                    variant="secondary"
+                    variant="ghost"
                     onClick={() =>
                       push({
-                        name: `Article #${form.values.articles?.length + 1}`,
+                        name: "",
                         price: 0,
                         quantity: 0,
+                        total: 0,
                       })
                     }
                   >
                     <Plus /> Ajouter un article
                   </Button>
-                </li>
-              </ul>
+                </CardFooter>
+              </>
             )}
           </FieldArray>
         </FormikProvider>
-      </div>
-    </>
+      </Card>
+    </div>
   );
 };

@@ -1,11 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
-import { CreateDocumentPayloadType } from "@/types";
+import { CreateDocumentPayloadType, DocumentType } from "@/types";
 import { useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
 import { DocumentInvoiceApiService } from "@/services";
 import { Button } from "@/components/ui/button";
 import { InvoiceForm, validationSchema } from "./form";
+import { InvoiceDefaultTemplate } from "@/components/invoice-template";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function InvoiceNewPage() {
   const navigate = useNavigate();
@@ -34,26 +37,33 @@ export function InvoiceNewPage() {
   });
 
   return (
-    <main className="min-h-screen grid grid-cols-[25%_1fr] gap-4 p-4">
-      <form
-        className="grid grid-rows-[1fr_min-content] gap-4"
-        onSubmit={form.handleSubmit}
-      >
-        <div className="grid gap-4 h-fit">
+    <main className="grid grid-cols-[auto_65%] gap-4 p-4">
+      <ScrollArea className="h-[90vh] pr-4">
+        <form
+          onSubmit={form.handleSubmit}
+          className="grid grid-rows-3 gap-4"
+        >
           <InvoiceForm form={form} />
-        </div>
-        <div className="flex justify-end gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => navigate("/invoices")}
-          >
-            Annuler
-          </Button>
-          <Button type="submit">Confirmer</Button>
-        </div>
-      </form>
-      <div className="border rounded"></div>
+          <div className="flex justify-end gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate("/invoices")}
+            >
+              Annuler
+            </Button>
+            <Button type="submit">Confirmer</Button>
+          </div>
+        </form>
+      </ScrollArea>
+      <div>
+        <AspectRatio
+          ratio={19 / 16}
+          className="w-[70%] flex justify-center items-center mx-auto"
+        >
+          <InvoiceDefaultTemplate invoice={form.values as DocumentType} />
+        </AspectRatio>
+      </div>
     </main>
   );
 }

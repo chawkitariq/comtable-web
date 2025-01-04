@@ -29,7 +29,7 @@ export function Combobox({ items = [], value, onSelect }: ComboboxProps) {
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger className="min-w-full" asChild>
         <Button
           variant="outline"
           role="combobox"
@@ -42,11 +42,9 @@ export function Combobox({ items = [], value, onSelect }: ComboboxProps) {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
+      <PopoverContent className="min-w-full p-0">
         <Command className="min-w-full">
-          <CommandInput
-            placeholder="Rechercher un article..."
-          />
+          <CommandInput placeholder="Rechercher un article..." />
           <CommandList>
             <CommandEmpty>Aucun élément n'a été trouvé.</CommandEmpty>
             <CommandGroup>

@@ -74,12 +74,12 @@ export function Router() {
             </Route>
 
             <Route path="invoices" element={<InvoiceRootPage />} />
-          </Route>
-
-          <Route path="invoices">
-            <Route path="new" element={<InvoiceNewPage />} />
-            <Route path=":invoiceId/edit" element={<InvoiceEditPage />} />
-            <Route path=":invoiceId/copy" element={<InvoiceCopyPage />} />
+            
+            <Route path="invoices">
+              <Route path="new" element={<InvoiceNewPage />} />
+              <Route path=":invoiceId/edit" element={<InvoiceEditPage />} />
+              <Route path=":invoiceId/copy" element={<InvoiceCopyPage />} />
+            </Route>
           </Route>
         </Route>
 
