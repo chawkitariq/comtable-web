@@ -9,23 +9,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useAuthenticationStore } from "@/stores";
 import { Building2, House, ReceiptText, Users } from "lucide-react";
 import { Link, Outlet } from "react-router";
 
 export function DefaultLayout() {
-  const { me } = useAuthenticationStore();
-
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>Comtable</SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarHeader>
+    <SidebarProvider open={false} id="default">
+      <Sidebar collapsible="icon">
+        <SidebarHeader></SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupContent>
@@ -37,18 +29,24 @@ export function DefaultLayout() {
                       <span>Acceuil</span>
                     </Link>
                   </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <Link to="/companies">
                       <Building2 />
                       <span>Entreprises</span>
                     </Link>
                   </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <Link to="/users">
                       <Users />
                       <span>Utilisateurs</span>
                     </Link>
                   </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <Link to="/roles">
                       <ReceiptText />
@@ -62,7 +60,6 @@ export function DefaultLayout() {
         </SidebarContent>
       </Sidebar>
       <SidebarInset>
-        <SidebarTrigger />
         <main className="p-2">
           <Outlet />
         </main>

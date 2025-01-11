@@ -23,17 +23,24 @@ export function RootPage() {
 
   const { company, setCompany } = useSessionStore();
 
-  const handleSwitchCompany = useCallback(
-    (id: string) => {
-      if (id) {
-        const company = companies?.find(
-          (company) => company.id === id
-        ) as CompanyType;
-        setCompany(company);
-        navigate("/articles");
-      }
+  const findCompanyById = useCallback(
+    (companyId: string) => {
+      return companies?.find(
+        (company) => company.id === companyId
+      ) as CompanyType;
     },
-    [companies, navigate, setCompany]
+    [companies]
+  );
+
+  const handleSwitchCompany = useCallback(
+    (companyId: string) => {
+      if (companyId) {
+        const company = findCompanyById(companyId);
+        setCompany(company);
+      }
+      navigate("/articles");
+    },
+    [findCompanyById, navigate, setCompany]
   );
 
   return (
