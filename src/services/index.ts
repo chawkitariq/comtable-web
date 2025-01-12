@@ -3,6 +3,8 @@ export * from "./authentication-api";
 export * from "./category-api";
 export * from "./company-api";
 export * from "./contact-api";
+export * from "./document-article-api";
+export * from "./document-article-tax-api";
 export * from "./document-invoice-api";
 export * from "./role-api";
 export * from "./tax-api";
