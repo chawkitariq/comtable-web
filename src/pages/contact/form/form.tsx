@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -11,7 +10,6 @@ import {
 import { ContactTypeEnum, UpdateContactPayloadType } from "@/types";
 import { useFormik } from "formik";
 import { forwardRef } from "react";
-import { useNavigate } from "react-router";
 
 interface ContactFormProps {
   form: ReturnType<typeof useFormik<UpdateContactPayloadType>>;
@@ -19,8 +17,6 @@ interface ContactFormProps {
 
 export const ContactForm = forwardRef<HTMLFormElement, ContactFormProps>(
   ({ form }, ref) => {
-    const navigate = useNavigate();
-
     return (
       <form
         className="grid gap-4 content-between"
@@ -147,17 +143,6 @@ export const ContactForm = forwardRef<HTMLFormElement, ContactFormProps>(
               onBlur={form.handleBlur}
             />
           </div>
-        </div>
-
-        <div className="flex justify-end gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => navigate("/contacts")}
-          >
-            Annuler
-          </Button>
-          <Button type="submit">Confirmer</Button>
         </div>
       </form>
     );

@@ -8,10 +8,12 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ContactForm, validationSchema } from "./form";
+import { ContactForm, contactFormValidationSchema } from "./form";
+import { Button } from "@/components/ui/button";
 
 export function ContactCopyPage() {
   const { contactId } = useParams();
@@ -47,7 +49,7 @@ export function ContactCopyPage() {
       name: contact?.name,
       type: contact?.type,
     },
-    validationSchema,
+    validationSchema: contactFormValidationSchema,
     onSubmit: (values) => updateContact(values),
     enableReinitialize: true,
   });
@@ -62,7 +64,19 @@ export function ContactCopyPage() {
           <DialogTitle>Copie</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
+
         <ContactForm form={form} />
+
+        <DialogFooter className="flex justify-end gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate("/contacts")}
+          >
+            Annuler
+          </Button>
+          <Button type="submit">Confirmer</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

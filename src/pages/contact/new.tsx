@@ -7,11 +7,13 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ContactApiService } from "@/services/contact-api";
-import { ContactForm, validationSchema } from "./form";
+import { ContactForm, contactFormValidationSchema } from "./form";
+import { Button } from "@/components/ui/button";
 
 export function ContactNewPage() {
   const navigate = useNavigate();
@@ -22,9 +24,8 @@ export function ContactNewPage() {
 
   const { mutate: createContact } = useMutation({
     mutationKey: ["contacts"],
-    mutationFn: (payload: CreateContactPayloadType) => {
-      return ContactApiService.create(company?.id!, payload);
-    },
+    mutationFn: (payload: CreateContactPayloadType) =>
+      ContactApiService.create(company?.id!, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["contacts"] });
       navigate("/contacts");
@@ -36,7 +37,7 @@ export function ContactNewPage() {
       name: "",
       type: ContactTypeEnum.Customer,
     },
-    validationSchema,
+    validationSchema: contactFormValidationSchema,
     onSubmit: (values) => createContact(values),
   });
 
@@ -50,7 +51,19 @@ export function ContactNewPage() {
           <DialogTitle>Nouveau</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
+
         <ContactForm form={form} />
+
+        <DialogFooter className="flex justify-end gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate("/contacts")}
+          >
+            Annuler
+          </Button>
+          <Button type="submit">Confirmer</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
