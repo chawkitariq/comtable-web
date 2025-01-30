@@ -9,3 +9,14 @@ export function isExpired(seconds: number): boolean {
   const currentTime = Math.floor(Date.now() / 1000);
   return currentTime >= seconds;
 }
+
+export function convertNullToUndefined<T extends Record<string, unknown>>(
+  obj = {}
+): T {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [
+      key,
+      value === null ? undefined : value,
+    ])
+  ) as T;
+}

@@ -14,6 +14,7 @@ import { InvoiceForm, validationSchema } from "./form";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { InvoiceDefaultTemplate } from "@/components";
+import { convertNullToUndefined } from "@/lib/utils";
 
 export function InvoiceCopyPage() {
   const { invoiceId } = useParams();
@@ -41,26 +42,19 @@ export function InvoiceCopyPage() {
 
   const form = useFormik<CreateDocumentPayloadType>({
     initialValues: {
-      number: invoice?.number ?? undefined,
-      orderNumber: invoice?.orderNumber ?? undefined,
+      ...convertNullToUndefined({
+        ...invoice,
+        documentArticles: invoice?.documentArticles?.map((documentArticle) =>
+          convertNullToUndefined({
+            ...documentArticle,
+            documentArticleTaxes: invoice?.documentArticleTaxes?.map(
+              convertNullToUndefined
+            ),
+          })
+        ),
+      }),
       issuedAt: invoice?.issuedAt ? new Date(invoice?.issuedAt) : undefined,
       dueAt: invoice?.dueAt ? new Date(invoice?.dueAt) : undefined,
-      contactName: invoice?.contactName ?? undefined,
-      contactEmail: invoice?.contactEmail ?? undefined,
-      contactPhone: invoice?.contactPhone ?? undefined,
-      contactAddress: invoice?.contactAddress ?? undefined,
-      contactCity: invoice?.contactCity ?? undefined,
-      contactPostalCode: invoice?.contactPostalCode ?? undefined,
-      contactState: invoice?.contactState ?? undefined,
-      contactCountry: invoice?.contactCountry ?? undefined,
-      articles:
-        invoice?.articles?.map((article) => ({
-          id: article?.id ?? undefined,
-          name: article?.name ?? undefined,
-          quantity: article?.quantity ?? undefined,
-          price: article?.price ?? undefined,
-          total: article?.total ?? undefined,
-        })) ?? undefined,
     },
     validationSchema,
     onSubmit: (values) => createInvoice(values),

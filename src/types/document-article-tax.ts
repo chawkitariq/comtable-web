@@ -11,7 +11,7 @@ export type DocumentArticleTaxType = {
   company?: CompanyType;
   document?: DocumentType;
   documentArticle?: DocumentArticleType;
-  tax?: unknown;
+  tax?: string;
   createdBy?: UserType;
   createdAt: Date;
   updatedAt: Date;
@@ -24,19 +24,8 @@ export type CreateDocumentArticleTaxPayloadType = {
   amount: number;
 };
 
-export type CreateManyDocumentArticleTaxPayloadType = {
-  documentArticleTaxes: CreateDocumentArticleTaxPayloadType[];
-};
-
 export type UpdateDocumentArticleTaxPayloadType =
   Partial<CreateDocumentArticleTaxPayloadType> & {
-    id: string;
+    id?: string;
+    remove?: boolean;
   };
-
-export type UpdateManyDocumentArticleTaxPayloadType = {
-  documentArticleTaxes: UpdateDocumentArticleTaxPayloadType[];
-};
-
-export type RemoveManyDocumentArticleTaxPayloadType = {
-  documentArticleTaxIds: string[];
-};

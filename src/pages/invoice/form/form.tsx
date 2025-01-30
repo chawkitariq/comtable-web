@@ -249,7 +249,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
           <CardTitle>Articles</CardTitle>
         </CardHeader>
         <FormikProvider value={form}>
-          <FieldArray name="articles">
+          <FieldArray name="documentArticles">
             {({ push }) => (
               <>
                 <CardContent>
@@ -265,7 +265,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {form.values.articles?.map((_, i) => (
+                      {form.values.documentArticles?.map((_, i) => (
                         <TableRow
                           key={i}
                           className="hover:bg-white grid grid-cols-[auto_3fr_1fr_1fr_1fr_auto] items-center"
@@ -275,9 +275,9 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                           </TableCell>
                           <TableCell>
                             <Input
-                              id={`articles.${i}.name`}
-                              name={`articles.${i}.name`}
-                              value={form.values.articles?.[i].name}
+                              id={`documentArticles.${i}.name`}
+                              name={`documentArticles.${i}.name`}
+                              value={form.values.documentArticles?.[i].name}
                               onChange={form.handleChange}
                               onBlur={form.handleBlur}
                             />
@@ -285,9 +285,9 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                           <TableCell>
                             <Input
                               type="number"
-                              id={`articles.${i}.price`}
-                              name={`articles.${i}.price`}
-                              value={form.values.articles?.[i].price}
+                              id={`documentArticles.${i}.price`}
+                              name={`documentArticles.${i}.price`}
+                              value={form.values.documentArticles?.[i].price}
                               onChange={form.handleChange}
                               onBlur={form.handleBlur}
                             />
@@ -295,9 +295,9 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                           <TableCell>
                             <Input
                               type="number"
-                              id={`articles.${i}.quantity`}
-                              name={`articles.${i}.quantity`}
-                              value={form.values.articles?.[i].quantity}
+                              id={`documentArticles.${i}.quantity`}
+                              name={`documentArticles.${i}.quantity`}
+                              value={form.values.documentArticles?.[i].quantity}
                               onChange={form.handleChange}
                               onBlur={form.handleBlur}
                             />
@@ -305,9 +305,9 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                           <TableCell>
                             <Input
                               type="number"
-                              id={`articles.${i}.total`}
-                              name={`articles.${i}.total`}
-                              value={form.values.articles?.[i].total}
+                              id={`documentArticles.${i}.total`}
+                              name={`documentArticles.${i}.total`}
+                              value={form.values.documentArticles?.[i].total}
                               onChange={form.handleChange}
                               onBlur={form.handleBlur}
                               disabled

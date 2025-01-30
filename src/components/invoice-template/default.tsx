@@ -53,15 +53,17 @@ export function InvoiceDefaultTemplate({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invoice.articles?.map((article, i) => (
+            {invoice.documentArticles?.map((documentArticle, i) => (
               <TableRow key={i} className="grid grid-cols-4">
-                <TableCell className="border">{article.name}</TableCell>
+                <TableCell className="border">{documentArticle.name}</TableCell>
                 <TableCell className="border">
-                  {article.price} ${invoice.currencyCode}
+                  {documentArticle.price} ${invoice.currencyCode}
                 </TableCell>
-                <TableCell className="border">{article.quantity}</TableCell>
                 <TableCell className="border">
-                  {article.total} ${invoice.currencyCode}
+                  {documentArticle.quantity}
+                </TableCell>
+                <TableCell className="border">
+                  {documentArticle.total} ${invoice.currencyCode}
                 </TableCell>
               </TableRow>
             ))}

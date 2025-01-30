@@ -1,5 +1,10 @@
 import { ArticleType, ArticleTypeEnum } from "./article";
 import { CompanyType } from "./company";
+import {
+  CreateDocumentArticleTaxPayloadType,
+  DocumentArticleTaxType,
+  UpdateDocumentArticleTaxPayloadType,
+} from "./document-article-tax";
 import { UserType } from "./user";
 
 export type DocumentArticleType = {
@@ -14,6 +19,7 @@ export type DocumentArticleType = {
   discountType: string;
   discountRate: string;
   total: string;
+  documentArticleTaxes: DocumentArticleTaxType[];
   company?: CompanyType;
   document?: DocumentType;
   article?: ArticleType;
@@ -30,21 +36,13 @@ export type CreateDocumentArticlePayloadType = {
   price?: number;
   tax?: number;
   total?: string;
+  documentArticleTaxes?: CreateDocumentArticleTaxPayloadType[];
 };
 
-export type CreateManyDocumentArticlePayloadType = {
-  documentArticles: CreateDocumentArticlePayloadType[];
-};
-
-export type UpdateDocumentArticlePayloadType =
-  Partial<CreateDocumentArticlePayloadType> & {
-    id: string;
-  };
-
-export type UpdateManyDocumentArticlePayloadType = {
-  documentArticles: UpdateDocumentArticlePayloadType[];
-};
-
-export type RemoveManyDocumentArticlePayloadType = {
-  documentArticleIds: string[];
+export type UpdateDocumentArticlePayloadType = Partial<
+  Omit<CreateDocumentArticlePayloadType, "documentArticleTaxes">
+> & {
+  id?: string;
+  remove?: boolean;
+  documentArticleTaxes?: UpdateDocumentArticleTaxPayloadType[];
 };

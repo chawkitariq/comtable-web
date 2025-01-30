@@ -1,5 +1,9 @@
 import { CompanyType } from "./company";
-import { DocumentArticleType } from "./document-article";
+import {
+  CreateDocumentArticlePayloadType,
+  DocumentArticleType,
+  UpdateDocumentArticlePayloadType,
+} from "./document-article";
 import { UserType } from "./user";
 
 export type DocumentType = {
@@ -26,7 +30,7 @@ export type DocumentType = {
   subTitle?: string;
   template?: string;
   color?: string;
-  articles?: DocumentArticleType[];
+  documentArticles?: DocumentArticleType[];
   company?: CompanyType;
   contact?: unknown;
   category?: unknown;
@@ -59,9 +63,12 @@ export type CreateDocumentPayloadType = {
   subTitle?: string;
   template?: string;
   color?: string;
+  documentArticles?: CreateDocumentArticlePayloadType[];
 };
 
-export type UpdateDocumentPayloadType = Partial<CreateDocumentPayloadType>;
+export type UpdateDocumentPayloadType = Partial<CreateDocumentPayloadType> & {
+  documentArticles?: UpdateDocumentArticlePayloadType[];
+};
 
 export enum DocumentTypeEnum {
   Invoice = "invoice",
