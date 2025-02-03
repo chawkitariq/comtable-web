@@ -250,7 +250,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
         </CardHeader>
         <FormikProvider value={form}>
           <FieldArray name="documentArticles">
-            {({ push }) => (
+            {({ push, remove }) => (
               <>
                 <CardContent>
                   <Table>
@@ -314,7 +314,12 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                             />
                           </TableCell>
                           <TableCell>
-                            <Button type="button" size="icon" variant="ghost">
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => remove(i)}
+                            >
                               <Trash2 />
                             </Button>
                           </TableCell>
