@@ -8,7 +8,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowUpDown, Copy, MoreVertical, Pencil, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -22,7 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 
 export function RoleRootPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -30,9 +30,15 @@ export function RoleRootPage() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const { data: roles } = useQuery({
+  const { data: roles, refetch } = useQuery({
     queryKey: ["roles"],
     queryFn: RoleApiService.findAll,
+  });
+
+  const { mutate: deleteRole } = useMutation({
+    mutationKey: ["roles"],
+    mutationFn: RoleApiService.delete,
+    onSuccess: () => refetch(),
   });
 
   const navigate = useNavigate();
@@ -129,7 +135,7 @@ export function RoleRootPage() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-red-500"
-                  // onClick={() => deleteTax(item.id)}
+                  onClick={() => deleteRole(item.id)}
                 >
                   <Trash />
                   Supprimer
@@ -156,5 +162,17 @@ export function RoleRootPage() {
     },
   });
 
-  return <DataTable table={table} />;
+  return (
+    <>
+      <div className="grid gap-4">
+        <div className="flex">
+          <Button onClick={() => navigate("/roles/new")} className="ml-auto">
+            Nouveau
+          </Button>
+        </div>
+        <DataTable table={table} />
+      </div>
+      <Outlet />
+    </>
+  );
 }

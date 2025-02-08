@@ -29,6 +29,9 @@ import {
   CategoryRootPage,
 } from "./category";
 import { DefaultLayout } from "@/layouts";
+import { RoleNewPage } from "./role/new";
+import { RoleEditPage } from "./role/edit";
+import { RoleCopyPage } from "./role/copy";
 
 export function Router() {
   return (
@@ -44,7 +47,12 @@ export function Router() {
             </Route>
 
             <Route path="users" element={<UserRootPage />} />
-            <Route path="roles" element={<RoleRootPage />} />
+
+            <Route path="roles" element={<RoleRootPage />}>
+              <Route path="new" element={<RoleNewPage />} />
+              <Route path=":roleId/edit" element={<RoleEditPage />} />
+              <Route path=":roleId/copy" element={<RoleCopyPage />} />
+            </Route>
 
             <Route path="articles" element={<ArticleRootPage />}>
               <Route path="new" element={<ArticleNewPage />} />

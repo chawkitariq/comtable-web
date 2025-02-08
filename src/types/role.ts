@@ -9,3 +9,11 @@ export type RoleType = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type CreateRolePayloadType = {
+  name: string;
+  slug?: string;
+  description?: string;
+};
+
+export type UpdateRolePayloadType = Partial<CreateRolePayloadType>;
