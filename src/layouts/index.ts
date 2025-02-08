@@ -1,2 +1,1 @@
-export * from "./company";
-export * from "./default";
+export * from "./default/default";

@@ -31,7 +31,6 @@ export function InvoiceNewPage() {
     initialValues: {
       documentArticles: [],
     },
-    // validationSchema,
     onSubmit: (values) => createInvoice(values),
   });
 

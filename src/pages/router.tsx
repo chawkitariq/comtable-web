@@ -1,7 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-
 import { Authenticable } from "@/components";
-import { CompanyLayout, DefaultLayout } from "@/layouts";
 import { LoginPage, RegisterPage } from "./authentication";
 import { CompanyEditPage, CompanyNewPage, CompanyRootPage } from "./company";
 import { TaxCopyPage, TaxEditPage, TaxNewPage, TaxRootPage } from "./tax";
@@ -30,6 +28,7 @@ import {
   CategoryNewPage,
   CategoryRootPage,
 } from "./category";
+import { DefaultLayout } from "@/layouts";
 
 export function Router() {
   return (
@@ -46,9 +45,7 @@ export function Router() {
 
             <Route path="users" element={<UserRootPage />} />
             <Route path="roles" element={<RoleRootPage />} />
-          </Route>
 
-          <Route element={<CompanyLayout />}>
             <Route path="articles" element={<ArticleRootPage />}>
               <Route path="new" element={<ArticleNewPage />} />
               <Route path=":articleId/edit" element={<ArticleEditPage />} />
@@ -74,7 +71,7 @@ export function Router() {
             </Route>
 
             <Route path="invoices" element={<InvoiceRootPage />} />
-            
+
             <Route path="invoices">
               <Route path="new" element={<InvoiceNewPage />} />
               <Route path=":invoiceId/edit" element={<InvoiceEditPage />} />
