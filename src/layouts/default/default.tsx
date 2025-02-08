@@ -2,6 +2,7 @@ import {
   Sidebar,
   SidebarInset,
   SidebarProvider,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Outlet } from "react-router";
 import { DefaultLayoutCompanySidebar } from "./company-sidebar";
@@ -25,6 +26,7 @@ export function DefaultLayout() {
       </Sidebar>
       <SidebarInset>
         <main className="p-2">
+          <SidebarTrigger className="-ml-1" />
           <Outlet />
         </main>
       </SidebarInset>
