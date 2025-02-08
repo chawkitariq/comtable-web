@@ -35,17 +35,7 @@ export function InvoiceEditPage() {
 
   const form = useFormik<UpdateDocumentPayloadType>({
     initialValues: {
-      ...convertNullToUndefined({
-        ...invoice,
-        documentArticles: invoice?.documentArticles?.map((documentArticle) =>
-          convertNullToUndefined({
-            ...documentArticle,
-            documentArticleTaxes: documentArticle?.documentArticleTaxes?.map(
-              convertNullToUndefined
-            ),
-          })
-        ),
-      }),
+      ...convertNullToUndefined(invoice),
       issuedAt: invoice?.issuedAt ? new Date(invoice?.issuedAt) : undefined,
       dueAt: invoice?.dueAt ? new Date(invoice?.dueAt) : undefined,
     },

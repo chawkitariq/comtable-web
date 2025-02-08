@@ -10,13 +10,18 @@ export function isExpired(seconds: number): boolean {
   return currentTime >= seconds;
 }
 
-export function convertNullToUndefined<T extends Record<string, unknown>>(
-  obj = {}
-): T {
+/**
+ * Converts all `null` values in an object and its nested objects to `undefined`.
+ */
+export function convertNullToUndefined<T extends object>(obj: T = {} as T): T {
   return Object.fromEntries(
     Object.entries(obj).map(([key, value]) => [
       key,
-      value === null ? undefined : value,
+      value === null
+        ? undefined
+        : value && typeof value === "object" && !Array.isArray(value)
+        ? convertNullToUndefined(value)
+        : value,
     ])
   ) as T;
 }

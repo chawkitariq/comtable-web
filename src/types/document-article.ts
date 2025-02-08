@@ -43,6 +43,5 @@ export type UpdateDocumentArticlePayloadType = Partial<
   Omit<CreateDocumentArticlePayloadType, "documentArticleTaxes">
 > & {
   id?: string;
-  remove?: boolean;
   documentArticleTaxes?: UpdateDocumentArticleTaxPayloadType[];
 };

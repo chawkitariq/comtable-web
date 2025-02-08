@@ -27,5 +27,4 @@ export type CreateDocumentArticleTaxPayloadType = {
 export type UpdateDocumentArticleTaxPayloadType =
   Partial<CreateDocumentArticleTaxPayloadType> & {
     id?: string;
-    remove?: boolean;
   };
