@@ -23,8 +23,10 @@ export function LoginPage() {
     mutationKey: ["login"],
     mutationFn: AuthenticationApiService.login,
     onSuccess: (response) => {
-      login(response);
-      navigate("/");
+      if (response) {
+        login(response);
+        navigate("/");
+      }
     },
   });
 
