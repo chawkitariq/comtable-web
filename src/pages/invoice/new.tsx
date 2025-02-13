@@ -36,25 +36,23 @@ export function InvoiceNewPage() {
 
   return (
     <main className="grid grid-cols-[auto_65%] gap-4 p-4">
-      <ScrollArea className="h-[90vh] pr-4">
-        <form onSubmit={form.handleSubmit} className="grid grid-rows-3 gap-4">
+      <div className="grid gap-4">
+        <ScrollArea className="h-[85vh] pr-4">
           <InvoiceForm form={form} />
-          <div className="flex justify-end gap-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => navigate("/invoices")}
-            >
-              Annuler
-            </Button>
-            <Button type="submit">Confirmer</Button>
-          </div>
-        </form>
-      </ScrollArea>
-      <div>
-        <div className="flex justify-center items-center mx-auto">
-          <InvoiceDefaultTemplate invoice={form.values as DocumentType} />
+        </ScrollArea>
+        <div className="flex justify-end gap-4 place-self-end">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate("/invoices")}
+          >
+            Annuler
+          </Button>
+          <Button onClick={() => form.submitForm()}>Confirmer</Button>
         </div>
+      </div>
+      <div className="h-full w-full p-9 bg-gray-100">
+        <InvoiceDefaultTemplate invoice={form.values as DocumentType} />
       </div>
     </main>
   );

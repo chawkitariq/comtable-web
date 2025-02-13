@@ -85,7 +85,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
   );
 
   return (
-    <>
+    <form onSubmit={form.handleSubmit}>
       <div className="grid gap-4">
         <Collapsible
           open={isContactFormVisible}
@@ -324,6 +324,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                       onClick={() => {
                         push({
                           name: "#",
+                          description: "#",
                           price: 0,
                           quantity: 0,
                           total: 0,
@@ -489,6 +490,6 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
           </DialogContent>
         </Dialog>
       )}
-    </>
+    </form>
   );
 };
