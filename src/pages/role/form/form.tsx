@@ -23,8 +23,10 @@ export const RoleForm = forwardRef<HTMLFormElement, RoleFormProps>(
   ({ form }, ref) => {
     const getPermissionIndex = useCallback(
       (subject: string) => {
-        return form.values.permissions?.findIndex(
-          (permission) => permission.subject === subject
+        return (
+          form.values.permissions?.findIndex(
+            (permission) => permission.subject === subject
+          ) ?? -1
         );
       },
       [form.values.permissions]
@@ -32,9 +34,9 @@ export const RoleForm = forwardRef<HTMLFormElement, RoleFormProps>(
 
     const handleCheckboxChange = useCallback(
       (subject: string, action: string, canAction: boolean) => {
-        const permissionIndex = getPermissionIndex(subject) ?? 0;
+        const permissionIndex = getPermissionIndex(subject);
         const index =
-          permissionIndex > 0
+          permissionIndex >= 0
             ? permissionIndex
             : form.values.permissions?.length;
 
