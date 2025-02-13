@@ -21,38 +21,26 @@ interface RoleFormProps {
 
 export const RoleForm = forwardRef<HTMLFormElement, RoleFormProps>(
   ({ form }, ref) => {
-    const getPermissionIndex = useCallback(
-      (subject: string) => {
-        return (
-          form.values.permissions?.findIndex(
-            (permission) => permission.subject === subject
-          ) ?? -1
-        );
-      },
-      [form.values.permissions]
+    const findPermissionIndexByName = useCallback(
+      (name: string) =>
+        form.values.permissions?.findIndex(
+          (permission) => permission.name === name
+        ) ?? -1,
+      [form]
     );
 
-    const handleCheckboxChange = useCallback(
-      (subject: string, action: string, canAction: boolean) => {
-        const permissionIndex = getPermissionIndex(subject);
-        const index =
-          permissionIndex >= 0
-            ? permissionIndex
-            : form.values.permissions?.length;
+    const handleTogglePermission = (name: string, toggle: boolean) => {
+      const permissionIndex = findPermissionIndexByName(name);
+      const permissions = form.values.permissions || [];
 
-        form.setFieldValue(`permissions.${index}.subject`, subject);
-        form.setFieldValue(`permissions.${index}.${action}`, canAction);
-      },
-      [form, getPermissionIndex]
-    );
+      if (toggle && permissionIndex === -1) {
+        permissions.push({ name });
+      } else if (!toggle && permissionIndex >= 0) {
+        permissions.splice(permissionIndex, 1);
+      }
 
-    const findPermissionActionForSubject = useCallback(
-      (subject: string) =>
-        form.values.permissions?.find(
-          (permission) => permission.subject === subject
-        ),
-      [form.values.permissions]
-    );
+      form.setFieldValue("permissions", permissions);
+    };
 
     return (
       <form
@@ -93,25 +81,23 @@ export const RoleForm = forwardRef<HTMLFormElement, RoleFormProps>(
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Object.entries(permissions).map(
-                ([subject, { label, actions }]) => (
-                  <TableRow key={subject}>
-                    <TableCell>{label}</TableCell>
-                    {actions.map((action) => (
-                      <TableCell key={action}>
-                        <Checkbox
-                          checked={
-                            findPermissionActionForSubject(subject)?.[action]
-                          }
-                          onCheckedChange={(canAction: boolean) =>
-                            handleCheckboxChange(subject, action, canAction)
-                          }
-                        />
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                )
-              )}
+              {Object.entries(permissions).map(([name, title]) => (
+                <TableRow key={name}>
+                  <TableCell>{title}</TableCell>
+                  {["create", "read", "update", "delete"].map((action) => (
+                    <TableCell key={action}>
+                      <Checkbox
+                        checked={
+                          findPermissionIndexByName(`${action}:${name}`) >= 0
+                        }
+                        onCheckedChange={(toggle: boolean) =>
+                          handleTogglePermission(`${action}:${name}`, toggle)
+                        }
+                      />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>
