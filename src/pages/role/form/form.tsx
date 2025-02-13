@@ -14,6 +14,7 @@ import { UpdateRolePayloadType } from "@/types";
 import { useFormik } from "formik";
 import { forwardRef, useCallback } from "react";
 import { permissions } from "./constants";
+import { FormErrorMessage } from "@/components";
 
 interface RoleFormProps {
   form: ReturnType<typeof useFormik<UpdateRolePayloadType>>;
@@ -58,6 +59,9 @@ export const RoleForm = forwardRef<HTMLFormElement, RoleFormProps>(
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {form.touched.name && form.errors.name && (
+              <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+            )}
           </div>
           <div className="grid gap-4">
             <Label htmlFor="description">Description</Label>
