@@ -1,3 +1,4 @@
+import { FormErrorMessage } from "@/components";
 import { Combobox } from "@/components/customs/combobox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +35,9 @@ export const UserForm = forwardRef<HTMLFormElement, UserFormProps>(
               onBlur={form.handleBlur}
               required
             />
+            {form.touched.email && form.errors.email && (
+              <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+            )}
           </div>
 
           <div className="grid gap-4">
@@ -58,6 +62,9 @@ export const UserForm = forwardRef<HTMLFormElement, UserFormProps>(
                 <RefreshCw />
               </Button>
             </div>
+            {form.touched.password && form.errors.password && (
+              <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+            )}
           </div>
 
           <div className="grid gap-4">
@@ -74,6 +81,9 @@ export const UserForm = forwardRef<HTMLFormElement, UserFormProps>(
                 })) || []
               }
             />
+            {form.touched.roleId && form.errors.roleId && (
+              <FormErrorMessage>{form.errors.roleId}</FormErrorMessage>
+            )}
           </div>
         </div>
       </form>
