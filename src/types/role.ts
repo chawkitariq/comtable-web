@@ -1,3 +1,7 @@
+import {
+  CreatePermissionPayloadType,
+  UpdatePermissionPayloadType,
+} from "./permission";
 import { UserType } from "./user";
 
 export type RoleType = {
@@ -12,8 +16,12 @@ export type RoleType = {
 
 export type CreateRolePayloadType = {
   name: string;
-  slug?: string;
   description?: string;
+  permissions?: CreatePermissionPayloadType[];
 };
 
-export type UpdateRolePayloadType = Partial<CreateRolePayloadType>;
+export type UpdateRolePayloadType = Partial<
+  Omit<CreateRolePayloadType, "permissions">
+> & {
+  permissions?: UpdatePermissionPayloadType[];
+};

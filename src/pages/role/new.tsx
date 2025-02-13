@@ -33,6 +33,7 @@ export function RoleNewPage() {
     initialValues: {
       name: "",
       description: "",
+      permissions: [],
     },
     validationSchema: roleFormValidationSchema,
     onSubmit: (values) => createRole(values),
