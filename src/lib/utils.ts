@@ -25,3 +25,22 @@ export function convertNullToUndefined<T extends object>(obj: T = {} as T): T {
     ])
   ) as T;
 }
+
+/**
+ * Generates a strong random password.
+ *
+ * @param {number} [length=12] - The length of the password to generate (default is 12).
+ * @returns {string} The generated random password.
+ */
+export function generateRandomPassword(length = 24) {
+  const charset =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?";
+  let password = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
+  }
+
+  return password;
+}

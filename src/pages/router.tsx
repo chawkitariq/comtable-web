@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Authenticable } from "@/components";
+import { RootPage } from "./root";
 import { LoginPage, RegisterPage } from "./authentication";
 import { CompanyEditPage, CompanyNewPage, CompanyRootPage } from "./company";
 import { TaxCopyPage, TaxEditPage, TaxNewPage, TaxRootPage } from "./tax";
-import { RoleRootPage, RootPage, UserRootPage } from ".";
 import {
   ArticleEditPage,
   ArticleRootPage,
@@ -28,10 +28,9 @@ import {
   CategoryNewPage,
   CategoryRootPage,
 } from "./category";
+import { UserCopyPage, UserEditPage, UserNewPage, UserRootPage } from "./user";
+import { RoleCopyPage, RoleEditPage, RoleNewPage, RoleRootPage } from "./role";
 import { DefaultLayout } from "@/layouts";
-import { RoleNewPage } from "./role/new";
-import { RoleEditPage } from "./role/edit";
-import { RoleCopyPage } from "./role/copy";
 
 export function Router() {
   return (
@@ -46,7 +45,11 @@ export function Router() {
               <Route path=":companyId/edit" element={<CompanyEditPage />} />
             </Route>
 
-            <Route path="users" element={<UserRootPage />} />
+            <Route path="users" element={<UserRootPage />}>
+              <Route path="new" element={<UserNewPage />} />
+              <Route path=":userId/edit" element={<UserEditPage />} />
+              <Route path=":userId/copy" element={<UserCopyPage />} />
+            </Route>
 
             <Route path="roles" element={<RoleRootPage />}>
               <Route path="new" element={<RoleNewPage />} />

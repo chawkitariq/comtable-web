@@ -23,9 +23,19 @@ interface ComboboxProps {
   }[];
   value: string;
   onSelect?: (value: string) => unknown;
+  placeholder?: string;
+  searchPlaceholder?: string;
+  emptyPlaceholder?: string;
 }
 
-export function Combobox({ items = [], value, onSelect }: ComboboxProps) {
+export function Combobox({
+  items = [],
+  value,
+  onSelect,
+  placeholder = "Sélectionner l'article...",
+  searchPlaceholder = "Rechercher un article...",
+  emptyPlaceholder = "Aucun élément n'a été trouvé.",
+}: ComboboxProps) {
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -38,15 +48,15 @@ export function Combobox({ items = [], value, onSelect }: ComboboxProps) {
         >
           {value
             ? items.find((item) => item.value === value)?.label
-            : "Sélectionner l'article..."}
+            : placeholder}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="min-w-full p-0">
         <Command className="min-w-full">
-          <CommandInput placeholder="Rechercher un article..." />
+          <CommandInput placeholder={searchPlaceholder} />
           <CommandList>
-            <CommandEmpty>Aucun élément n'a été trouvé.</CommandEmpty>
+            <CommandEmpty>{emptyPlaceholder}</CommandEmpty>
             <CommandGroup>
               {items.map((item) => (
                 <CommandItem
