@@ -59,6 +59,7 @@ export function LoginPage() {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                     required
+                    autoFocus
                   />
                 </div>
 

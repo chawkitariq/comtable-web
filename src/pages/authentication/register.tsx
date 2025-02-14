@@ -51,6 +51,7 @@ export function RegisterPage() {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                     required
+                    autoFocus
                   />
                 </div>
 
