@@ -9,11 +9,32 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Building2, House, MailPlus, ReceiptText, Users } from "lucide-react";
+import {
+  Bell,
+  BellDot,
+  Building2,
+  House,
+  MailPlus,
+  ReceiptText,
+  Users,
+} from "lucide-react";
 import { NavLink } from "react-router";
 import { UserNav } from "./user-nav";
+import { NotificationApiService } from "@/services";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 
 export function DefaultLayoutUserSidebar() {
+  const { data: notifications } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: NotificationApiService.findAll,
+  });
+
+  const hasUnreadedNotifications = useMemo(
+    () => notifications?.some(({ isReaded }) => !isReaded),
+    [notifications]
+  );
+
   return (
     <Sidebar
       collapsible="none"
@@ -40,6 +61,19 @@ export function DefaultLayoutUserSidebar() {
                     <SidebarMenuButton title="Invitations" isActive={isActive}>
                       <MailPlus />
                       <span>Invitations</span>
+                    </SidebarMenuButton>
+                  )}
+                </NavLink>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <NavLink to="/notifications">
+                  {({ isActive }) => (
+                    <SidebarMenuButton
+                      title="Notifications"
+                      isActive={isActive}
+                    >
+                      {!hasUnreadedNotifications ? <Bell /> : <BellDot />}
+                      <span>Notifications</span>
                     </SidebarMenuButton>
                   )}
                 </NavLink>

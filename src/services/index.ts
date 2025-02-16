@@ -5,6 +5,7 @@ export * from "./company-api";
 export * from "./contact-api";
 export * from "./document-invoice-api";
 export * from "./invitation-api";
+export * from "./notification-api";
 export * from "./role-api";
 export * from "./tax-api";
 export * from "./user-api";

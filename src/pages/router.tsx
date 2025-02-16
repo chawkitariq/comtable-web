@@ -1,6 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Authenticable } from "@/components";
-import { RootPage } from "./root";
 import { LoginPage, RegisterPage } from "./authentication";
 import { CompanyEditPage, CompanyNewPage, CompanyRootPage } from "./company";
 import { TaxCopyPage, TaxEditPage, TaxNewPage, TaxRootPage } from "./tax";
@@ -37,6 +36,7 @@ import {
   InvitationRootPage,
 } from "./invitation";
 import { DefaultLayout } from "@/layouts";
+import { NotificationRootPage, NotificationShowPage } from "./notification";
 
 export function Router() {
   return (
@@ -49,6 +49,13 @@ export function Router() {
             <Route path="companies" element={<CompanyRootPage />}>
               <Route path="new" element={<CompanyNewPage />} />
               <Route path=":companyId/edit" element={<CompanyEditPage />} />
+            </Route>
+
+            <Route path="notifications" element={<NotificationRootPage />}>
+              <Route
+                path=":notificationId/show"
+                element={<NotificationShowPage />}
+              />
             </Route>
 
             <Route path="users" element={<UserRootPage />}>
