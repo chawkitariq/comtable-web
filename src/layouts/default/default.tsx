@@ -25,8 +25,11 @@ export function DefaultLayout() {
         <DefaultLayoutCompanySidebar />
       </Sidebar>
       <SidebarInset>
-        <main className="p-2">
+        <header className="p-4 flex items-center border-b">
           <SidebarTrigger className="-ml-1" />
+        </header>
+
+        <main className="p-4 grid gap-4">
           <Outlet />
         </main>
       </SidebarInset>

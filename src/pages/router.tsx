@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Authenticable } from "@/components";
 import { RootPage } from "./root";
 import { LoginPage, RegisterPage } from "./authentication";
@@ -30,6 +30,12 @@ import {
 } from "./category";
 import { UserCopyPage, UserEditPage, UserNewPage, UserRootPage } from "./user";
 import { RoleCopyPage, RoleEditPage, RoleNewPage, RoleRootPage } from "./role";
+import {
+  InvitationCopyPage,
+  InvitationEditPage,
+  InvitationNewPage,
+  InvitationRootPage,
+} from "./invitation";
 import { DefaultLayout } from "@/layouts";
 
 export function Router() {
@@ -37,9 +43,9 @@ export function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Authenticable />}>
-          <Route index element={<RootPage />} />
-
           <Route element={<DefaultLayout />}>
+            <Route index element={<Navigate to="/companies" replace />} />
+
             <Route path="companies" element={<CompanyRootPage />}>
               <Route path="new" element={<CompanyNewPage />} />
               <Route path=":companyId/edit" element={<CompanyEditPage />} />
@@ -49,6 +55,18 @@ export function Router() {
               <Route path="new" element={<UserNewPage />} />
               <Route path=":userId/edit" element={<UserEditPage />} />
               <Route path=":userId/copy" element={<UserCopyPage />} />
+            </Route>
+
+            <Route path="invitations" element={<InvitationRootPage />}>
+              <Route path="new" element={<InvitationNewPage />} />
+              <Route
+                path=":invitationId/edit"
+                element={<InvitationEditPage />}
+              />
+              <Route
+                path=":invitationId/copy"
+                element={<InvitationCopyPage />}
+              />
             </Route>
 
             <Route path="roles" element={<RoleRootPage />}>

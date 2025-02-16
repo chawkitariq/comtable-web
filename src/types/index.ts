@@ -5,6 +5,7 @@ export * from "./company";
 export * from "./document-article-tax";
 export * from "./document-article";
 export * from "./document";
+export * from "./invitation";
 export * from "./contact";
 export * from "./role";
 export * from "./tax";

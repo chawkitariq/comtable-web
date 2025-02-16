@@ -178,6 +178,8 @@ export function CompanyRootPage() {
     <>
       <div className="grid gap-4">
         <div className="flex">
+          <h1 className="text-3xl font-bold tracking-tight">Entreprises</h1>
+
           <Button
             onClick={() => navigate("/companies/new")}
             className="ml-auto"

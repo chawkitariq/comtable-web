@@ -1,6 +1,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -8,8 +9,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Building2, House, ReceiptText, Users } from "lucide-react";
-import { Link } from "react-router";
+import { Building2, House, MailPlus, ReceiptText, Users } from "lucide-react";
+import { NavLink } from "react-router";
+import { UserNav } from "./user-nav";
 
 export function DefaultLayoutUserSidebar() {
   return (
@@ -23,41 +25,62 @@ export function DefaultLayoutUserSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/">
-                    <House />
-                    <span>Acceuil</span>
-                  </Link>
-                </SidebarMenuButton>
+                <NavLink to="/">
+                  {({ isActive }) => (
+                    <SidebarMenuButton title="Acceuil" isActive={isActive}>
+                      <House />
+                      <span>Acceuil</span>
+                    </SidebarMenuButton>
+                  )}
+                </NavLink>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/companies">
-                    <Building2 />
-                    <span>Entreprises</span>
-                  </Link>
-                </SidebarMenuButton>
+                <NavLink to="/invitations">
+                  {({ isActive }) => (
+                    <SidebarMenuButton title="Invitations" isActive={isActive}>
+                      <MailPlus />
+                      <span>Invitations</span>
+                    </SidebarMenuButton>
+                  )}
+                </NavLink>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/users">
-                    <Users />
-                    <span>Utilisateurs</span>
-                  </Link>
-                </SidebarMenuButton>
+                <NavLink to="/companies">
+                  {({ isActive }) => (
+                    <SidebarMenuButton title="Entreprises" isActive={isActive}>
+                      <Building2 />
+                      <span>Entreprises</span>
+                    </SidebarMenuButton>
+                  )}
+                </NavLink>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/roles">
-                    <ReceiptText />
-                    <span>Roles</span>
-                  </Link>
-                </SidebarMenuButton>
+                <NavLink to="/users">
+                  {({ isActive }) => (
+                    <SidebarMenuButton title="Utilisateurs" isActive={isActive}>
+                      <Users />
+                      <span>Utilisateurs</span>
+                    </SidebarMenuButton>
+                  )}
+                </NavLink>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <NavLink to="/roles">
+                  {({ isActive }) => (
+                    <SidebarMenuButton title="Roles" isActive={isActive}>
+                      <ReceiptText />
+                      <span>Roles</span>
+                    </SidebarMenuButton>
+                  )}
+                </NavLink>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <UserNav />
+      </SidebarFooter>
     </Sidebar>
   );
 }
