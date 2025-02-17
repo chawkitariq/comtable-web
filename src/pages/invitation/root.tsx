@@ -28,8 +28,8 @@ import {
   InvitationStatusEnum,
   InvitationType,
 } from "@/types";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useAlertDialogConfirmRemove } from "@/hooks";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const invitationStatusVariant = {
   [InvitationStatusEnum.Accepted]: "default",
@@ -286,22 +286,22 @@ export function InvitationRootPage() {
         <h1 className="text-3xl font-bold tracking-tight">Invitations</h1>
 
         <div className="flex">
-          <ToggleGroup
-            type="single"
-            variant="outline"
+          <Tabs
             value={invitationFetchType}
             onValueChange={setInvitationFetchType}
           >
-            <ToggleGroupItem value={InvitationFetchTypeEnum.All}>
-              Tout
-            </ToggleGroupItem>
-            <ToggleGroupItem value={InvitationFetchTypeEnum.Sended}>
-              Envoyées
-            </ToggleGroupItem>
-            <ToggleGroupItem value={InvitationFetchTypeEnum.Received}>
-              Reçues
-            </ToggleGroupItem>
-          </ToggleGroup>
+            <TabsList>
+              <TabsTrigger value={InvitationFetchTypeEnum.All}>
+                Toutes
+              </TabsTrigger>
+              <TabsTrigger value={InvitationFetchTypeEnum.Sended}>
+                Envoyées
+              </TabsTrigger>
+              <TabsTrigger value={InvitationFetchTypeEnum.Received}>
+                Reçues
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
 
           <Button
             onClick={() => navigate("/invitations/new")}

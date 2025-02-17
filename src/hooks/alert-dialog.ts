@@ -28,7 +28,7 @@ export function useAlertDialogConfirmRemove() {
         cancelButtonVariant: "outline",
         actionButtonVariant: "destructive",
       }),
-    []
+    [alertDialogConfirm]
   );
 }
 
