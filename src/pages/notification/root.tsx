@@ -17,6 +17,7 @@ import { NotificationApiService } from "@/services";
 import { DataTable } from "@/components/data-table";
 import { useDataTableSelectableColumn } from "@/lib";
 import { NotificationType } from "@/types";
+import { useAlertDialogConfirmRemove } from "@/hooks";
 
 export function NotificationRootPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -48,6 +49,8 @@ export function NotificationRootPage() {
   });
 
   const navigate = useNavigate();
+
+  const alertDialogConfirmRemove = useAlertDialogConfirmRemove();
 
   const tableData = useMemo(() => notifications ?? [], [notifications]);
 
@@ -118,7 +121,13 @@ export function NotificationRootPage() {
               <Button
                 size="sm"
                 variant="destructive"
-                onClick={() => deleteAllNotification([item.id])}
+                onClick={() =>
+                  alertDialogConfirmRemove().then((isConfirm) => {
+                    if (isConfirm) {
+                      deleteAllNotification([item.id]);
+                    }
+                  })
+                }
               >
                 <Trash />
               </Button>
@@ -157,8 +166,6 @@ export function NotificationRootPage() {
     [table.getSelectedRowModel().rows]
   );
 
-  console.log(isSelectedDataTableRows);
-
   return (
     <>
       <div className="grid gap-4">
@@ -184,11 +191,15 @@ export function NotificationRootPage() {
             <Button
               variant="destructive"
               onClick={() =>
-                deleteAllNotification(
-                  table
-                    .getSelectedRowModel()
-                    .rows.map(({ original }) => original.id)
-                )
+                alertDialogConfirmRemove().then((isConfirm) => {
+                  if (isConfirm) {
+                    deleteAllNotification(
+                      table
+                        .getSelectedRowModel()
+                        .rows.map(({ original }) => original.id)
+                    );
+                  }
+                })
               }
             >
               <Trash /> Tout supprimer

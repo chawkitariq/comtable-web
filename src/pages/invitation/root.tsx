@@ -29,6 +29,7 @@ import {
   InvitationType,
 } from "@/types";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useAlertDialogConfirmRemove } from "@/hooks";
 
 const invitationStatusVariant = {
   [InvitationStatusEnum.Accepted]: "default",
@@ -95,7 +96,10 @@ export function InvitationRootPage() {
 
   const navigate = useNavigate();
 
+  const alertDialogConfirmRemove = useAlertDialogConfirmRemove();
+
   const tableData = useMemo(() => invitations ?? [], [invitations]);
+
   const table = useReactTable({
     data: tableData,
     columns: [
@@ -242,7 +246,13 @@ export function InvitationRootPage() {
                   )}
                   <DropdownMenuItem
                     className="text-red-500"
-                    onClick={() => deleteInvitation(item.id)}
+                    onClick={() =>
+                      alertDialogConfirmRemove().then((isConfirm) => {
+                        if (isConfirm) {
+                          deleteInvitation(item.id);
+                        }
+                      })
+                    }
                   >
                     <Trash />
                     Supprimer
