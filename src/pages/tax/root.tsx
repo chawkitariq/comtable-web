@@ -196,6 +196,7 @@ export function TaxRootPage() {
     <>
       <div className="grid gap-4">
         <div className="flex">
+          <h1 className="text-3xl font-bold tracking-tight">Taxes</h1>
           <Button onClick={() => navigate("/taxes/new")} className="ml-auto">
             Nouveau
           </Button>

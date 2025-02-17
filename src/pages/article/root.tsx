@@ -240,6 +240,7 @@ export function ArticleRootPage() {
     <>
       <div className="grid gap-4">
         <div className="flex">
+          <h1 className="text-3xl font-bold tracking-tight">Articles</h1>
           <Button onClick={() => navigate("/articles/new")} className="ml-auto">
             Nouveau
           </Button>

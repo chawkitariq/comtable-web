@@ -196,6 +196,7 @@ export function ContactRootPage() {
     <>
       <div className="grid gap-4">
         <div className="flex">
+          <h1 className="text-3xl font-bold tracking-tight">Contacts</h1>
           <Button onClick={() => navigate("/contacts/new")} className="ml-auto">
             Nouveau
           </Button>

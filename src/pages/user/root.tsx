@@ -149,6 +149,7 @@ export function UserRootPage() {
     <>
       <div className="grid gap-4">
         <div className="flex">
+          <h1 className="text-3xl font-bold tracking-tight">Utilisateures</h1>
           <Button onClick={() => navigate("/users/new")} className="ml-auto">
             Nouveau
           </Button>

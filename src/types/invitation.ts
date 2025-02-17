@@ -4,6 +4,7 @@ import {
   UpdatePermissionPayloadType,
 } from "./permission";
 import { RoleType } from "./role";
+import { UserType } from "./user";
 
 export type InvitationType = {
   id: string;
@@ -11,8 +12,8 @@ export type InvitationType = {
   expiredAt?: Date;
   status: InvitationStatusEnum;
   role?: RoleType;
-  sender?: RoleType;
-  recipient?: RoleType;
+  sender?: UserType;
+  receiver?: UserType;
   permissions?: PermissionType[];
   isPending: boolean;
   createdAt: Date;

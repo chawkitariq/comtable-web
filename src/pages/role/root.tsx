@@ -166,6 +166,7 @@ export function RoleRootPage() {
     <>
       <div className="grid gap-4">
         <div className="flex">
+          <h1 className="text-3xl font-bold tracking-tight">Rôles</h1>
           <Button onClick={() => navigate("/roles/new")} className="ml-auto">
             Nouveau
           </Button>

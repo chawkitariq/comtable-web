@@ -227,6 +227,7 @@ export function InvoiceRootPage() {
     <>
       <div className="grid gap-4">
         <div className="flex">
+          <h1 className="text-3xl font-bold tracking-tight">Factures</h1>
           <Button onClick={() => navigate("/invoices/new")} className="ml-auto">
             Nouveau
           </Button>
