@@ -9,3 +9,9 @@ export type NotificationType = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export enum NotificationFetchTypeEnum {
+  All = "all",
+  Readed = "readed",
+  Unreaded = "unreaded",
+}

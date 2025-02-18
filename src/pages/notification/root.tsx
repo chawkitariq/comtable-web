@@ -16,14 +16,18 @@ import { Outlet, useNavigate } from "react-router";
 import { NotificationApiService } from "@/services";
 import { DataTable } from "@/components/data-table";
 import { useDataTableSelectableColumn } from "@/lib";
-import { NotificationType } from "@/types";
+import { NotificationFetchTypeEnum, NotificationType } from "@/types";
 import { useAlertDialogConfirmRemove } from "@/hooks";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function NotificationRootPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+
+  const [notificationFetchType, setNotificationFetchType] =
+    useState<NotificationFetchTypeEnum>(NotificationFetchTypeEnum.All);
 
   const { data: notifications } = useQuery({
     queryKey: ["notifications"],
@@ -171,41 +175,60 @@ export function NotificationRootPage() {
       <div className="grid gap-4">
         <h1 className="text-3xl font-bold tracking-tight">Notifications</h1>
 
-        {isSelectedDataTableRows && (
-          <div className="flex items-center gap-2 ml-auto">
-            {hasUnreadedNotifications && (
-              <Button
-                onClick={() =>
-                  readAllNotification(
-                    table
-                      .getSelectedRowModel()
-                      .rows.filter(({ original }) => !original.isReaded)
-                      .map(({ original }) => original.id)
-                  )
-                }
-              >
-                <Check />
-                Tout lire
-              </Button>
-            )}
-            <Button
-              variant="destructive"
-              onClick={() =>
-                alertDialogConfirmRemove().then((isConfirm) => {
-                  if (isConfirm) {
-                    deleteAllNotification(
+        <div className="flex">
+          <Tabs
+            value={notificationFetchType}
+            onValueChange={setNotificationFetchType}
+          >
+            <TabsList>
+              <TabsTrigger value={NotificationFetchTypeEnum.All}>
+                Toutes
+              </TabsTrigger>
+              <TabsTrigger value={NotificationFetchTypeEnum.Unreaded}>
+                Non lues
+              </TabsTrigger>
+              <TabsTrigger value={NotificationFetchTypeEnum.Readed}>
+                Lues
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          {isSelectedDataTableRows && (
+            <div className="flex items-center gap-2 ml-auto">
+              {hasUnreadedNotifications && (
+                <Button
+                  onClick={() =>
+                    readAllNotification(
                       table
                         .getSelectedRowModel()
-                        .rows.map(({ original }) => original.id)
-                    );
+                        .rows.filter(({ original }) => !original.isReaded)
+                        .map(({ original }) => original.id)
+                    )
                   }
-                })
-              }
-            >
-              <Trash /> Tout supprimer
-            </Button>
-          </div>
-        )}
+                >
+                  <Check />
+                  Tout lire
+                </Button>
+              )}
+              <Button
+                variant="destructive"
+                onClick={() =>
+                  alertDialogConfirmRemove().then((isConfirm) => {
+                    if (isConfirm) {
+                      deleteAllNotification(
+                        table
+                          .getSelectedRowModel()
+                          .rows.map(({ original }) => original.id)
+                      );
+                    }
+                  })
+                }
+              >
+                <Trash /> Tout supprimer
+              </Button>
+            </div>
+          )}
+        </div>
 
         <DataTable table={table} />
       </div>

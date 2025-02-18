@@ -15,7 +15,7 @@ import {
   Building2,
   House,
   MailPlus,
-  ReceiptText,
+  Shield,
   Users,
 } from "lucide-react";
 import { NavLink } from "react-router";
@@ -101,9 +101,9 @@ export function DefaultLayoutUserSidebar() {
               <SidebarMenuItem>
                 <NavLink to="/roles">
                   {({ isActive }) => (
-                    <SidebarMenuButton title="Roles" isActive={isActive}>
-                      <ReceiptText />
-                      <span>Roles</span>
+                    <SidebarMenuButton title="Rôles" isActive={isActive}>
+                      <Shield />
+                      <span>Rôles</span>
                     </SidebarMenuButton>
                   )}
                 </NavLink>

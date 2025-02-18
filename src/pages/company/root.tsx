@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowUpDown, Eye, MoreVertical, Pencil, Trash } from "lucide-react";
+import { ArrowUpDown, MoreVertical, Pencil, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -48,7 +48,7 @@ export function CompanyRootPage() {
 
   const navigate = useNavigate();
 
-  const { setCompany } = useSessionStore();
+  const { company: sessionCompany, setCompany } = useSessionStore();
 
   const tableData = useMemo(() => companies ?? [], [companies]);
 
@@ -123,37 +123,37 @@ export function CompanyRootPage() {
         cell: ({ row }) => {
           const item = row.original;
           return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreVertical />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onClick={() => {
-                    setCompany(item);
-                    navigate("/dashboard");
-                  }}
-                >
-                  <Eye />
-                  Voir
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate(`${item.id}/edit`)}>
-                  <Pencil />
-                  Modifier
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-red-500"
-                  onClick={() => deleteCompany(item.id)}
-                >
-                  <Trash />
-                  Supprimer
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="grid gap-2 grid-cols-[repeat(3,_min-content)]">
+              <Button
+                size="sm"
+                onClick={() => setCompany(item)}
+                disabled={item.id === sessionCompany.id}
+              >
+                Sélectionner
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreVertical />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => navigate(`${item.id}/edit`)}>
+                    <Pencil />
+                    Modifier
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-500"
+                    onClick={() => deleteCompany(item.id)}
+                  >
+                    <Trash />
+                    Supprimer
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           );
         },
       },
