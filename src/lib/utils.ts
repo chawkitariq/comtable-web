@@ -44,3 +44,16 @@ export function generateRandomPassword(length = 24) {
 
   return password;
 }
+
+/**
+ * Validates whether a given string is a valid UUID version 4.
+ *
+ * @param {string} uuid - The UUID string to validate.
+ * @returns {boolean} - Returns `true` if the UUID is valid and version 4, otherwise `false`.
+ */
+export function isValidUuidV4(uuid: string): boolean {
+  const pattern =
+    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+
+  return pattern.test(uuid);
+}

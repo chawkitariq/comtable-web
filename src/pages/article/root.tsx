@@ -122,27 +122,6 @@ export function ArticleRootPage() {
         ),
       },
       {
-        accessorKey: "quantity",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            >
-              Quantité
-              <ArrowUpDown />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <Badge className="lowercase" variant="outline">
-            {row.getValue("quantity")}
-          </Badge>
-        ),
-      },
-      {
         accessorKey: "salePrice",
         header: ({ column }) => {
           return (
