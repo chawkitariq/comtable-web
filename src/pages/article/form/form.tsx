@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,8 +9,11 @@ import {
 } from "@/components/ui/select";
 import { ArticleTypeEnum, UpdateArticlePayloadType } from "@/types";
 import { useFormik } from "formik";
-import { forwardRef } from "react";
-import { useNavigate } from "react-router";
+import { forwardRef, useCallback, useMemo, useState } from "react";
+import { Tag, TagInput } from "emblor";
+import { useQuery } from "@tanstack/react-query";
+import { TaxApiService } from "@/services";
+import { useSessionStore } from "@/stores";
 
 interface ArticleFormProps {
   form: ReturnType<typeof useFormik<UpdateArticlePayloadType>>;
@@ -19,7 +21,39 @@ interface ArticleFormProps {
 
 export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
   ({ form }, ref) => {
-    const navigate = useNavigate();
+    const [activeTaxesTagIndex, setActiveTaxesTagIndex] = useState<
+      number | null
+    >(null);
+
+    const { company } = useSessionStore();
+
+    const { data: taxes } = useQuery({
+      queryKey: ["taxes"],
+      queryFn: () => TaxApiService.findAll(company.id!),
+    });
+
+    const handleSetTaxesTags = useCallback(
+      (taxesTags: Tag[]) =>
+        form.setFieldValue(
+          "taxIds",
+          taxesTags.map(({ id }) => id)
+        ),
+      [form]
+    );
+
+    const taxesTags: Tag[] = useMemo(
+      () =>
+        taxes
+          ?.filter(({ id }) => form.values.taxIds?.includes(id))
+          .map(({ id, name: text }) => ({
+            id,
+            text,
+          })) ?? [],
+      [form.values.taxIds, taxes]
+    );
+
+    console.log(taxes);
+    console.log(taxesTags);
 
     return (
       <form
@@ -84,17 +118,19 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
               onBlur={form.handleBlur}
             />
           </div>
-        </div>
 
-        <div className="flex justify-end gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => navigate("/articles")}
-          >
-            Annuler
-          </Button>
-          <Button type="submit">Confirmer</Button>
+          <div className="grid gap-4">
+            <Label htmlFor="purchasePrice">Taxes</Label>
+            <TagInput
+              tags={taxesTags}
+              setTags={handleSetTaxesTags}
+              placeholder="Sélectionner des taxes"
+              activeTagIndex={activeTaxesTagIndex}
+              setActiveTagIndex={setActiveTaxesTagIndex}
+              enableAutocomplete={true}
+              restrictTagsToAutocompleteOptions={true}
+            />
+          </div>
         </div>
       </form>
     );
