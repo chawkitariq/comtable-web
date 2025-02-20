@@ -212,6 +212,28 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
           <CardContent className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
+                <Label htmlFor="issuedAt">Date d'émission</Label>
+                <InputCalendar
+                  value={form.values.issuedAt}
+                  onChange={(issuedAt) =>
+                    form.setFieldValue("issuedAt", issuedAt)
+                  }
+                  onBlur={() => form.setFieldTouched("issuedAt", true)}
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="dueAt">Date d'échéance</Label>
+                <InputCalendar
+                  value={form.values.dueAt}
+                  onChange={(dueAt) => form.setFieldValue("dueAt", dueAt)}
+                  onBlur={() => form.setFieldTouched("dueAt", true)}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
                 <Label htmlFor="number">Numéro de facturation</Label>
                 <Input
                   id="number"
@@ -230,28 +252,6 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                   value={form.values.orderNumber}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="issuedAt">Date d'émission</Label>
-                <InputCalendar
-                  value={form.values.issuedAt}
-                  onChange={(issuedAt) =>
-                    form.setFieldValue("issuedAt", issuedAt)
-                  }
-                  onBlur={() => form.setFieldTouched("issuedAt", true)}
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="dueAt">Date d'échéance</Label>
-                <InputCalendar
-                  value={form.values.dueAt}
-                  onChange={(dueAt) => form.setFieldValue("dueAt", dueAt)}
-                  onBlur={() => form.setFieldTouched("dueAt", true)}
                 />
               </div>
             </div>
@@ -362,7 +362,9 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
               <Input
                 id={`documentArticles.${documentArticleIndex}.name`}
                 name={`documentArticles.${documentArticleIndex}.name`}
-                value={form.values.documentArticles?.[documentArticleIndex!].name}
+                value={
+                  form.values.documentArticles?.[documentArticleIndex!].name
+                }
                 onChange={form.handleChange}
                 onBlur={form.handleBlur}
               />
@@ -464,7 +466,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                                       type="button"
                                       size="icon"
                                       variant="ghost"
-                                      onClick={() => { }}
+                                      onClick={() => {}}
                                     >
                                       <Pencil />
                                     </Button>
