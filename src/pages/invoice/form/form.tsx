@@ -356,44 +356,60 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
               </DialogTitle>
               <DialogDescription></DialogDescription>
             </DialogHeader>
-            <Input
-              id={`documentArticles.${documentArticleIndex}.name`}
-              name={`documentArticles.${documentArticleIndex}.name`}
-              value={form.values.documentArticles?.[documentArticleIndex!].name}
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
-            />
-            <Input
-              type="number"
-              id={`documentArticles.${documentArticleIndex}.price`}
-              name={`documentArticles.${documentArticleIndex}.price`}
-              value={
-                form.values.documentArticles?.[documentArticleIndex!].price
-              }
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
-            />
-            <Input
-              type="number"
-              id={`documentArticles.${documentArticleIndex}.quantity`}
-              name={`documentArticles.${documentArticleIndex}.quantity`}
-              value={
-                form.values.documentArticles?.[documentArticleIndex!].quantity
-              }
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
-            />
-            <Input
-              type="number"
-              id={`documentArticles.${documentArticleIndex}.total`}
-              name={`documentArticles.${documentArticleIndex}.total`}
-              value={
-                form.values.documentArticles?.[documentArticleIndex!].total
-              }
-              onChange={form.handleChange}
-              onBlur={form.handleBlur}
-              disabled
-            />
+
+            <div className="grid gap-4">
+              <Label htmlFor="name">Nom</Label>
+              <Input
+                id={`documentArticles.${documentArticleIndex}.name`}
+                name={`documentArticles.${documentArticleIndex}.name`}
+                value={form.values.documentArticles?.[documentArticleIndex!].name}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+              />
+            </div>
+
+            <div className="grid gap-4">
+              <Label htmlFor="price">Prix</Label>
+              <Input
+                type="number"
+                id={`documentArticles.${documentArticleIndex}.price`}
+                name={`documentArticles.${documentArticleIndex}.price`}
+                value={
+                  form.values.documentArticles?.[documentArticleIndex!].price
+                }
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+              />
+            </div>
+
+            <div className="grid gap-4">
+              <Label htmlFor="quantity">Quantité</Label>
+              <Input
+                type="number"
+                id={`documentArticles.${documentArticleIndex}.quantity`}
+                name={`documentArticles.${documentArticleIndex}.quantity`}
+                value={
+                  form.values.documentArticles?.[documentArticleIndex!].quantity
+                }
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+              />
+            </div>
+
+            <div className="grid gap-4">
+              <Label htmlFor="total">Total</Label>
+              <Input
+                type="number"
+                id={`documentArticles.${documentArticleIndex}.total`}
+                name={`documentArticles.${documentArticleIndex}.total`}
+                value={
+                  form.values.documentArticles?.[documentArticleIndex!].total
+                }
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                disabled
+              />
+            </div>
 
             <Card>
               <CardHeader>
@@ -426,7 +442,8 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                                   <TableCell className="cursor-grab">
                                     <GripVertical />
                                   </TableCell>
-                                  <TableCell>
+                                  <TableCell className="grid gap-4">
+                                    <Label htmlFor="name">Nom</Label>
                                     <Input
                                       id={`documentArticles.${documentArticleIndex}.documentArticleTaxes.${documentArticleTaxeIndex}.name`}
                                       name={`documentArticles.${documentArticleIndex}.documentArticleTaxes.${documentArticleTaxeIndex}.name`}
@@ -447,7 +464,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                                       type="button"
                                       size="icon"
                                       variant="ghost"
-                                      onClick={() => {}}
+                                      onClick={() => { }}
                                     >
                                       <Pencil />
                                     </Button>
