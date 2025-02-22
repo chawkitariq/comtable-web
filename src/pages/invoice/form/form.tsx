@@ -16,7 +16,6 @@ import {
 import {
   Command,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
@@ -40,16 +39,15 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useAlertDialogConfirmRemove } from "@/hooks";
+import { Textarea } from "@/components/ui/textarea";
 import { convertNullToUndefined } from "@/lib";
-import { ArticleApiService } from "@/services";
+import { ArticleApiService, TaxApiService } from "@/services";
 import { ContactApiService } from "@/services/contact-api";
 import { useSessionStore } from "@/stores";
-import { CreateDocumentPayloadType, TaxTypeEnum } from "@/types";
+import { CreateDocumentPayloadType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import {
@@ -71,6 +69,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
   const [selectedContactId, setSelectedContactId] = useState("");
   const [documentArticleIndex, setDocumentArticleIndex] = useState<number>();
   const [isArticlePopoverOpen, setIsArticlePopoverOpen] = useState(false);
+  const [isTaxPopoverOpen, setIsTaxPopoverOpen] = useState(false);
 
   const { company } = useSessionStore();
 
@@ -83,6 +82,12 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
   const { data: articles } = useQuery({
     queryKey: ["articles"],
     queryFn: () => ArticleApiService.findAll(company.id!),
+    enabled: Boolean(company?.id),
+  });
+
+  const { data: taxes } = useQuery({
+    queryKey: ["taxes"],
+    queryFn: () => TaxApiService.findAll(company.id!),
     enabled: Boolean(company?.id),
   });
 
@@ -102,17 +107,68 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
     [contacts, form]
   );
 
-  const alertDialogConfirmRemove = useAlertDialogConfirmRemove();
-
   return (
     <form onSubmit={form.handleSubmit}>
       <div className="grid gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Facturation</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-4">
+                <Label htmlFor="number">Numéro de facturation</Label>
+                <Input
+                  id="number"
+                  name="number"
+                  value={form.values.number}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
+
+              <div className="grid gap-4">
+                <Label htmlFor="orderNumber">Numéro de commande</Label>
+                <Input
+                  id="orderNumber"
+                  name="orderNumber"
+                  value={form.values.orderNumber}
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-4">
+                <Label htmlFor="issuedAt">Date d'émission</Label>
+                <InputCalendar
+                  value={form.values.issuedAt}
+                  onChange={(issuedAt) =>
+                    form.setFieldValue("issuedAt", issuedAt)
+                  }
+                  onBlur={() => form.setFieldTouched("issuedAt", true)}
+                />
+              </div>
+
+              <div className="grid gap-4">
+                <Label htmlFor="dueAt">Date d'échéance</Label>
+                <InputCalendar
+                  value={form.values.dueAt}
+                  onChange={(dueAt) => form.setFieldValue("dueAt", dueAt)}
+                  onBlur={() => form.setFieldTouched("dueAt", true)}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         <Collapsible
           open={isContactFormVisible}
           onOpenChange={setIsContactFormVisible}
         >
           <Card>
-            <CardHeader className="flex flex-row justify-between items-center gap-2">
+            <CardHeader className="flex flex-row justify-between items-center gap-4">
               <CardTitle>Contact</CardTitle>
               <CollapsibleTrigger asChild>
                 <Button size="icon" variant="ghost">
@@ -121,7 +177,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
               </CollapsibleTrigger>
             </CardHeader>
             <CardContent className="grid gap-4">
-              <div className="grid gap-2">
+              <div className="grid gap-4">
                 <Label>Contact</Label>
                 <Combobox
                   value={selectedContactId}
@@ -133,7 +189,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                 />
               </div>
               <CollapsibleContent className="grid gap-4">
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                   <Label htmlFor="number">Nom</Label>
                   <Input
                     id="contactName"
@@ -144,7 +200,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                   />
                 </div>
 
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                   <Label htmlFor="contactEmail">Email</Label>
                   <Input
                     id="contactEmail"
@@ -155,7 +211,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                   />
                 </div>
 
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                   <Label htmlFor="contactPhone">Téléphone</Label>
                   <Input
                     id="contactPhone"
@@ -166,7 +222,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                   />
                 </div>
 
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                   <Label htmlFor="contactAddress">Adresse</Label>
                   <Input
                     id="contactAddress"
@@ -177,7 +233,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                   />
                 </div>
 
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                   <Label htmlFor="contactPostalCode">Code postale</Label>
                   <Input
                     id="contactPostalCode"
@@ -188,7 +244,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                   />
                 </div>
 
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                   <Label htmlFor="contactCity">Ville</Label>
                   <Input
                     id="contactCity"
@@ -199,7 +255,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                   />
                 </div>
 
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                   <Label htmlFor="contactState">Région</Label>
                   <Input
                     id="contactState"
@@ -210,7 +266,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                   />
                 </div>
 
-                <div className="grid gap-2">
+                <div className="grid gap-4">
                   <Label htmlFor="contactCountry">Pays</Label>
                   <Input
                     id="contactCountry"
@@ -224,59 +280,6 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
             </CardContent>
           </Card>
         </Collapsible>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Facturation</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="issuedAt">Date d'émission</Label>
-                <InputCalendar
-                  value={form.values.issuedAt}
-                  onChange={(issuedAt) =>
-                    form.setFieldValue("issuedAt", issuedAt)
-                  }
-                  onBlur={() => form.setFieldTouched("issuedAt", true)}
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="dueAt">Date d'échéance</Label>
-                <InputCalendar
-                  value={form.values.dueAt}
-                  onChange={(dueAt) => form.setFieldValue("dueAt", dueAt)}
-                  onBlur={() => form.setFieldTouched("dueAt", true)}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="number">Numéro de facturation</Label>
-                <Input
-                  id="number"
-                  name="number"
-                  value={form.values.number}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="orderNumber">Numéro de commande</Label>
-                <Input
-                  id="orderNumber"
-                  name="orderNumber"
-                  value={form.values.orderNumber}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
         <Card>
           <CardHeader>
@@ -315,11 +318,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                                 type="button"
                                 size="icon"
                                 variant="ghost"
-                                onClick={() =>
-                                  alertDialogConfirmRemove().then(
-                                    (isConfirm) => isConfirm && remove(i)
-                                  )
-                                }
+                                onClick={() => remove(i)}
                               >
                                 <Trash2 />
                               </Button>
@@ -344,28 +343,29 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                           <CommandInput placeholder="Rechercher un article..." />
                           <CommandList>
                             <CommandEmpty>Aucun résultat trouvé.</CommandEmpty>
-                            <CommandGroup>
-                              {articles?.map((article) => (
-                                <CommandItem
-                                  key={article.id}
-                                  value={article.id}
-                                  onSelect={() => {
-                                    push({
-                                      ...convertNullToUndefined(article),
-                                      price: article.salePrice,
-                                      quantity: 0,
-                                      total: 0,
-                                    });
-                                    setDocumentArticleIndex(
-                                      form.values.documentArticles?.length
-                                    );
-                                    setIsArticlePopoverOpen(false);
-                                  }}
-                                >
-                                  {article.name}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
+                            {articles?.map((article) => (
+                              <CommandItem
+                                key={article.id}
+                                value={article.id}
+                                onSelect={() => {
+                                  push({
+                                    ...convertNullToUndefined(article),
+                                    documentArticleTaxes: article.taxes?.map(
+                                      convertNullToUndefined
+                                    ),
+                                    price: article.salePrice,
+                                    quantity: 0,
+                                    total: 0,
+                                  });
+                                  setDocumentArticleIndex(
+                                    form.values.documentArticles?.length
+                                  );
+                                  setIsArticlePopoverOpen(false);
+                                }}
+                              >
+                                {article.name}
+                              </CommandItem>
+                            ))}
                             <CommandSeparator />
                             <CommandItem
                               onSelect={() => {
@@ -382,8 +382,8 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                                 setIsArticlePopoverOpen(false);
                               }}
                             >
-                              <div className="flex items-center gap-2 p-1">
-                                <Plus className="size-4" />
+                              <div className="flex items-center gap-4">
+                                <Plus />
                                 Ajouter un article
                               </div>
                             </CommandItem>
@@ -398,12 +398,13 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
           </FormikProvider>
         </Card>
       </div>
+
       {documentArticleIndex !== undefined && (
         <Dialog
           open={true}
           onOpenChange={() => setDocumentArticleIndex(undefined)}
         >
-          <DialogContent>
+          <DialogContent className="h-[90vh] min-w-[30vw] overflow-y-auto grid grid-rows-[repeat(2,_min-content)]">
             <DialogHeader>
               <DialogTitle>
                 {form.values.documentArticles?.[documentArticleIndex!].name}
@@ -412,154 +413,188 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
             </DialogHeader>
 
             <div className="grid gap-4">
-              <Label htmlFor="name">Nom</Label>
-              <Input
-                id={`documentArticles.${documentArticleIndex}.name`}
-                name={`documentArticles.${documentArticleIndex}.name`}
-                value={
-                  form.values.documentArticles?.[documentArticleIndex!].name
-                }
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
-              />
-            </div>
+              <div className="grid gap-4">
+                <Label htmlFor="name">Nom</Label>
+                <Input
+                  id={`documentArticles.${documentArticleIndex}.name`}
+                  name={`documentArticles.${documentArticleIndex}.name`}
+                  value={
+                    form.values.documentArticles?.[documentArticleIndex!].name
+                  }
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
 
-            <div className="grid gap-4">
-              <Label htmlFor="price">Prix</Label>
-              <Input
-                type="number"
-                id={`documentArticles.${documentArticleIndex}.price`}
-                name={`documentArticles.${documentArticleIndex}.price`}
-                value={
-                  form.values.documentArticles?.[documentArticleIndex!].price
-                }
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
-              />
-            </div>
+              <div className="grid gap-4">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id={`documentArticles.${documentArticleIndex}.description`}
+                  name={`documentArticles.${documentArticleIndex}.description`}
+                  value={
+                    form.values.documentArticles?.[documentArticleIndex!]
+                      .description
+                  }
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
 
-            <div className="grid gap-4">
-              <Label htmlFor="quantity">Quantité</Label>
-              <Input
-                type="number"
-                id={`documentArticles.${documentArticleIndex}.quantity`}
-                name={`documentArticles.${documentArticleIndex}.quantity`}
-                value={
-                  form.values.documentArticles?.[documentArticleIndex!].quantity
-                }
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
-              />
-            </div>
+              <div className="grid gap-4">
+                <Label htmlFor="price">Prix</Label>
+                <Input
+                  type="number"
+                  id={`documentArticles.${documentArticleIndex}.price`}
+                  name={`documentArticles.${documentArticleIndex}.price`}
+                  value={
+                    form.values.documentArticles?.[documentArticleIndex!].price
+                  }
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
 
-            <div className="grid gap-4">
-              <Label htmlFor="total">Total</Label>
-              <Input
-                type="number"
-                id={`documentArticles.${documentArticleIndex}.total`}
-                name={`documentArticles.${documentArticleIndex}.total`}
-                value={
-                  form.values.documentArticles?.[documentArticleIndex!].total
-                }
-                onChange={form.handleChange}
-                onBlur={form.handleBlur}
-                disabled
-              />
-            </div>
+              <div className="grid gap-4">
+                <Label htmlFor="quantity">Quantité</Label>
+                <Input
+                  type="number"
+                  id={`documentArticles.${documentArticleIndex}.quantity`}
+                  name={`documentArticles.${documentArticleIndex}.quantity`}
+                  value={
+                    form.values.documentArticles?.[documentArticleIndex!]
+                      .quantity
+                  }
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Taxes</CardTitle>
-              </CardHeader>
-              <FormikProvider value={form}>
-                <FieldArray
-                  name={`documentArticles.${documentArticleIndex}.documentArticleTaxes`}
-                >
-                  {({ push, remove }) => (
-                    <>
-                      <CardContent>
-                        <Table>
-                          <TableHeader>
-                            <TableRow className="hover:bg-white grid grid-cols-[auto_3fr_1fr]">
-                              <TableHead></TableHead>
-                              <TableHead>Nom</TableHead>
-                              <TableHead></TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {form.values.documentArticles?.[
-                              documentArticleIndex
-                            ].documentArticleTaxes?.map(
-                              (_, documentArticleTaxeIndex) => (
-                                <TableRow
-                                  key={documentArticleTaxeIndex}
-                                  className="hover:bg-white grid grid-cols-[auto_3fr_1fr] items-center"
-                                >
-                                  <TableCell className="cursor-grab">
-                                    <GripVertical />
-                                  </TableCell>
-                                  <TableCell className="grid gap-4">
-                                    <Label htmlFor="name">Nom</Label>
-                                    <Input
-                                      id={`documentArticles.${documentArticleIndex}.documentArticleTaxes.${documentArticleTaxeIndex}.name`}
-                                      name={`documentArticles.${documentArticleIndex}.documentArticleTaxes.${documentArticleTaxeIndex}.name`}
-                                      value={
+              <div className="grid gap-4">
+                <Label htmlFor="total">Total</Label>
+                <Input
+                  type="number"
+                  id={`documentArticles.${documentArticleIndex}.total`}
+                  name={`documentArticles.${documentArticleIndex}.total`}
+                  value={
+                    form.values.documentArticles?.[documentArticleIndex!].total
+                  }
+                  onChange={form.handleChange}
+                  onBlur={form.handleBlur}
+                />
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Taxes</CardTitle>
+                </CardHeader>
+
+                <FormikProvider value={form}>
+                  <FieldArray
+                    name={`documentArticles.${documentArticleIndex}.documentArticleTaxes`}
+                  >
+                    {({ push, remove }) => (
+                      <>
+                        <CardContent>
+                          <Table>
+                            <TableHeader>
+                              <TableRow></TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {form.values.documentArticles?.[
+                                documentArticleIndex
+                              ].documentArticleTaxes?.map(
+                                (_, documentArticleTaxeIndex) => (
+                                  <TableRow
+                                    key={documentArticleTaxeIndex}
+                                    className="hover:bg-white grid grid-cols-[2fr_1fr_auto] gap-8 items-center"
+                                  >
+                                    <TableCell className="grid gap-4">
+                                      {
                                         form.values.documentArticles?.[
                                           documentArticleIndex
                                         ]?.documentArticleTaxes?.[
                                           documentArticleTaxeIndex
                                         ].name
                                       }
-                                      onChange={form.handleChange}
-                                      onBlur={form.handleBlur}
-                                    />
-                                  </TableCell>
+                                    </TableCell>
 
-                                  <TableCell>
-                                    <Button
-                                      type="button"
-                                      size="icon"
-                                      variant="ghost"
-                                      onClick={() => {}}
-                                    >
-                                      <Pencil />
-                                    </Button>
-                                    <Button
-                                      type="button"
-                                      size="icon"
-                                      variant="ghost"
-                                      onClick={() =>
-                                        remove(documentArticleTaxeIndex)
-                                      }
-                                    >
-                                      <Trash2 />
-                                    </Button>
-                                  </TableCell>
-                                </TableRow>
-                              )
-                            )}
-                          </TableBody>
-                        </Table>
-                      </CardContent>
-                      <CardFooter className="grid place-items-end">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          onClick={() => {
-                            push({
-                              name: "#",
-                              type: TaxTypeEnum.Normal,
-                            });
-                          }}
-                        >
-                          <Plus /> Ajouter une taxe
-                        </Button>
-                      </CardFooter>
-                    </>
-                  )}
-                </FieldArray>
-              </FormikProvider>
-            </Card>
+                                    <TableCell>__</TableCell>
+
+                                    <TableCell>
+                                      <Button
+                                        type="button"
+                                        size="icon"
+                                        variant="ghost"
+                                        onClick={() =>
+                                          remove(documentArticleTaxeIndex)
+                                        }
+                                      >
+                                        <Trash2 />
+                                      </Button>
+                                    </TableCell>
+                                  </TableRow>
+                                )
+                              )}
+                            </TableBody>
+                          </Table>
+                        </CardContent>
+                        <CardFooter className="grid place-items-end">
+                          <Popover
+                            open={isTaxPopoverOpen}
+                            onOpenChange={setIsTaxPopoverOpen}
+                          >
+                            <PopoverTrigger asChild>
+                              <Button type="button" variant="ghost">
+                                <Plus /> Ajouter une taxe
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="p-0"
+                              side="left"
+                              align="start"
+                            >
+                              <Command>
+                                <CommandInput placeholder="Rechercher une taxe..." />
+                                <CommandList>
+                                  <CommandEmpty>
+                                    Aucun résultat trouvé.
+                                  </CommandEmpty>
+                                  {taxes
+                                    ?.filter(
+                                      ({ name }) =>
+                                        !form.values.documentArticles?.[
+                                          documentArticleIndex
+                                        ]?.documentArticleTaxes
+                                          ?.map(({ name }) => name)
+                                          .includes(name)
+                                    )
+                                    .map((tax) => (
+                                      <CommandItem
+                                        key={tax.id}
+                                        value={tax.id}
+                                        onSelect={() => {
+                                          push({
+                                            name: tax.name,
+                                            type: tax.type,
+                                            amount: tax.rate,
+                                          });
+                                          setIsTaxPopoverOpen(false);
+                                        }}
+                                      >
+                                        {tax.name}
+                                      </CommandItem>
+                                    ))}
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                        </CardFooter>
+                      </>
+                    )}
+                  </FieldArray>
+                </FormikProvider>
+              </Card>
+            </div>
           </DialogContent>
         </Dialog>
       )}

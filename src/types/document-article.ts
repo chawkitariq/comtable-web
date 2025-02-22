@@ -30,10 +30,11 @@ export type DocumentArticleType = {
 };
 
 export type CreateDocumentArticlePayloadType = {
-  name?: string;
-  type?: ArticleTypeEnum;
+  name: string;
+  type: ArticleTypeEnum;
+  description?: string;
   quantity?: number;
-  price?: number;
+  price: number;
   tax?: number;
   total?: string;
   documentArticleTaxes?: CreateDocumentArticleTaxPayloadType[];
