@@ -11,11 +11,13 @@ import { ArticleTypeEnum, UpdateArticlePayloadType } from "@/types";
 import { useFormik } from "formik";
 import { forwardRef, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { TaxApiService } from "@/services";
+import { CategoryApiService, TaxApiService } from "@/services";
 import { useSessionStore } from "@/stores";
 import MultipleSelector, {
   Option,
 } from "@/components/customs/multiple-selector";
+import { Combobox } from "@/components/customs/combobox";
+import { FormErrorMessage } from "@/components";
 
 interface ArticleFormProps {
   form: ReturnType<typeof useFormik<UpdateArticlePayloadType>>;
@@ -28,6 +30,11 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
     const { data: taxes } = useQuery({
       queryKey: ["taxes"],
       queryFn: () => TaxApiService.findAll(company.id!),
+    });
+
+    const { data: categories } = useQuery({
+      queryKey: ["categories"],
+      queryFn: () => CategoryApiService.findAll(company.id!),
     });
 
     const handleTaxesOptionsChange = useCallback(
@@ -95,6 +102,9 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {form.touched.name && form.errors.name && (
+              <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+            )}
           </div>
 
           <div className="grid gap-4">
@@ -107,6 +117,9 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {form.touched.salePrice && form.errors.salePrice && (
+              <FormErrorMessage>{form.errors.salePrice}</FormErrorMessage>
+            )}
           </div>
 
           <div className="grid gap-4">
@@ -119,6 +132,30 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {form.touched.purchasePrice && form.errors.purchasePrice && (
+              <FormErrorMessage>{form.errors.purchasePrice}</FormErrorMessage>
+            )}
+          </div>
+
+          <div className="grid gap-4">
+            <Label>Catégorie</Label>
+            <Combobox
+              placeholder="Sélectionner une catégorie..."
+              searchPlaceholder="Rechercher une catégorie..."
+              value={form.values.categoryId || ""}
+              onSelect={(categoryId) =>
+                form.setFieldValue("categoryId", categoryId ? categoryId : null)
+              }
+              items={
+                categories?.map(({ id, name }) => ({
+                  label: name,
+                  value: id,
+                })) || []
+              }
+            />
+            {form.touched.categoryId && form.errors.categoryId && (
+              <FormErrorMessage>{form.errors.categoryId}</FormErrorMessage>
+            )}
           </div>
 
           <div className="grid gap-4">
@@ -134,6 +171,9 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
                 </p>
               }
             />
+            {form.touched.taxIds && form.errors.taxIds && (
+              <FormErrorMessage>{form.errors.taxIds}</FormErrorMessage>
+            )}
           </div>
         </div>
       </form>

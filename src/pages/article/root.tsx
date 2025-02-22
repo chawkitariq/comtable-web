@@ -25,6 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import { Outlet, useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
 import { DataTable } from "@/components/data-table";
+import { CategoryType, TaxType } from "@/types";
 
 export function ArticleRootPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -122,6 +123,65 @@ export function ArticleRootPage() {
         ),
       },
       {
+        accessorKey: "taxes",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Taxes
+              <ArrowUpDown />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          const taxes = row
+            .getValue<TaxType[]>("taxes")
+            ?.map(({ name }) => name);
+
+          return (
+            <>
+              {taxes?.map((name, i) => (
+                <Badge key={i} className="lowercase" variant="outline">
+                  {name}
+                </Badge>
+              ))}
+            </>
+          );
+        },
+      },
+      {
+        accessorKey: "category",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Catégorie
+              <ArrowUpDown />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          const category = row.getValue<CategoryType>("category")?.name;
+          return (
+            <>
+              {category && (
+                <Badge className="lowercase" variant="outline">
+                  {category}
+                </Badge>
+              )}
+            </>
+          );
+        },
+      },
+      {
         accessorKey: "salePrice",
         header: ({ column }) => {
           return (
@@ -136,11 +196,7 @@ export function ArticleRootPage() {
             </Button>
           );
         },
-        cell: ({ row }) => (
-          <Badge className="lowercase" variant="outline">
-            {row.getValue("salePrice")}
-          </Badge>
-        ),
+        cell: ({ row }) => <p>{row.getValue("salePrice")}</p>,
       },
       {
         accessorKey: "purchasePrice",
@@ -157,11 +213,7 @@ export function ArticleRootPage() {
             </Button>
           );
         },
-        cell: ({ row }) => (
-          <Badge className="lowercase" variant="outline">
-            {row.getValue("purchasePrice")}
-          </Badge>
-        ),
+        cell: ({ row }) => <p>{row.getValue("purchasePrice")}</p>,
       },
       {
         id: "actions",
