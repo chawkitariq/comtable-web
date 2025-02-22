@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import { ArticleTypeEnum, UpdateArticlePayloadType } from "@/types";
 import { useFormik } from "formik";
-import { forwardRef, useCallback, useMemo, useState } from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
 import { Tag, TagInput } from "emblor";
 import { useQuery } from "@tanstack/react-query";
 import { TaxApiService } from "@/services";
@@ -25,35 +25,14 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
       number | null
     >(null);
 
+    const [taxesTags, setTaxesTags] = useState<Tag[]>([]);
+
     const { company } = useSessionStore();
 
     const { data: taxes } = useQuery({
       queryKey: ["taxes"],
       queryFn: () => TaxApiService.findAll(company.id!),
     });
-
-    const handleSetTaxesTags = useCallback(
-      (taxesTags: Tag[]) =>
-        form.setFieldValue(
-          "taxIds",
-          taxesTags.map(({ id }) => id)
-        ),
-      [form]
-    );
-
-    const taxesTags: Tag[] = useMemo(
-      () =>
-        taxes
-          ?.filter(({ id }) => form.values.taxIds?.includes(id))
-          .map(({ id, name: text }) => ({
-            id,
-            text,
-          })) ?? [],
-      [form.values.taxIds, taxes]
-    );
-
-    console.log(taxes);
-    console.log(taxesTags);
 
     return (
       <form
@@ -122,8 +101,8 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
           <div className="grid gap-4">
             <Label htmlFor="purchasePrice">Taxes</Label>
             <TagInput
-              tags={taxesTags}
-              setTags={handleSetTaxesTags}
+              tags={taxes?.map()}
+              setTags={setTaxesTags}
               placeholder="Sélectionner des taxes"
               activeTagIndex={activeTaxesTagIndex}
               setActiveTagIndex={setActiveTaxesTagIndex}
