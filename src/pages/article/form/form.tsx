@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,8 +9,15 @@ import {
 } from "@/components/ui/select";
 import { ArticleTypeEnum, UpdateArticlePayloadType } from "@/types";
 import { useFormik } from "formik";
-import { forwardRef } from "react";
-import { useNavigate } from "react-router";
+import { forwardRef, useCallback, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { CategoryApiService, TaxApiService } from "@/services";
+import { useSessionStore } from "@/stores";
+import MultipleSelector, {
+  Option,
+} from "@/components/customs/multiple-selector";
+import { Combobox } from "@/components/customs/combobox";
+import { FormErrorMessage } from "@/components";
 
 interface ArticleFormProps {
   form: ReturnType<typeof useFormik<UpdateArticlePayloadType>>;
@@ -19,7 +25,44 @@ interface ArticleFormProps {
 
 export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
   ({ form }, ref) => {
-    const navigate = useNavigate();
+    const { company } = useSessionStore();
+
+    const { data: taxes } = useQuery({
+      queryKey: ["taxes"],
+      queryFn: () => TaxApiService.findAll(company.id!),
+    });
+
+    const { data: categories } = useQuery({
+      queryKey: ["categories"],
+      queryFn: () => CategoryApiService.findAll(company.id!),
+    });
+
+    const handleTaxesOptionsChange = useCallback(
+      (options: Option[]) =>
+        form.setFieldValue(
+          "taxIds",
+          options.map(({ value }) => value)
+        ),
+      [form]
+    );
+
+    const taxesOptionsValue = useMemo(
+      () =>
+        taxes
+          ?.filter(({ id }) => form.values.taxIds?.includes(id))
+          .map(({ id, name }) => ({ label: name, value: id })),
+      [taxes, form]
+    );
+
+    const defaultTaxesOptions: Option[] = useMemo(
+      () =>
+        taxes?.map(({ id, name }) => ({
+          label: name,
+          value: id,
+          [id]: id,
+        })) ?? [],
+      [taxes]
+    );
 
     return (
       <form
@@ -59,6 +102,9 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {form.touched.name && form.errors.name && (
+              <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+            )}
           </div>
 
           <div className="grid gap-4">
@@ -71,6 +117,9 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {form.touched.salePrice && form.errors.salePrice && (
+              <FormErrorMessage>{form.errors.salePrice}</FormErrorMessage>
+            )}
           </div>
 
           <div className="grid gap-4">
@@ -83,18 +132,49 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {form.touched.purchasePrice && form.errors.purchasePrice && (
+              <FormErrorMessage>{form.errors.purchasePrice}</FormErrorMessage>
+            )}
           </div>
-        </div>
 
-        <div className="flex justify-end gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => navigate("/articles")}
-          >
-            Annuler
-          </Button>
-          <Button type="submit">Confirmer</Button>
+          <div className="grid gap-4">
+            <Label>Catégorie</Label>
+            <Combobox
+              placeholder="Sélectionner une catégorie..."
+              searchPlaceholder="Rechercher une catégorie..."
+              value={form.values.categoryId || ""}
+              onSelect={(categoryId) =>
+                form.setFieldValue("categoryId", categoryId ? categoryId : null)
+              }
+              items={
+                categories?.map(({ id, name }) => ({
+                  label: name,
+                  value: id,
+                })) || []
+              }
+            />
+            {form.touched.categoryId && form.errors.categoryId && (
+              <FormErrorMessage>{form.errors.categoryId}</FormErrorMessage>
+            )}
+          </div>
+
+          <div className="grid gap-4">
+            <Label htmlFor="purchasePrice">Taxes</Label>
+            <MultipleSelector
+              value={taxesOptionsValue}
+              onChange={handleTaxesOptionsChange}
+              defaultOptions={defaultTaxesOptions}
+              placeholder="Sélectionner les taxes..."
+              emptyIndicator={
+                <p className="text-center leading-10 text-gray-600 dark:text-gray-400">
+                  Aucun résultat trouvé
+                </p>
+              }
+            />
+            {form.touched.taxIds && form.errors.taxIds && (
+              <FormErrorMessage>{form.errors.taxIds}</FormErrorMessage>
+            )}
+          </div>
         </div>
       </form>
     );

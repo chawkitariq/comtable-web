@@ -9,9 +9,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export function ArticleNewPage() {
   const navigate = useNavigate();
@@ -52,7 +54,19 @@ export function ArticleNewPage() {
           <DialogTitle>Nouveau</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
+
         <ArticleForm form={form} />
+
+        <DialogFooter className="flex justify-end gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate("/articles")}
+          >
+            Annuler
+          </Button>
+          <Button onClick={() => form.submitForm()}>Confirmer</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -1,3 +1,8 @@
+import { CategoryType } from "./category";
+import { CompanyType } from "./company";
+import { TaxType } from "./tax";
+import { UserType } from "./user";
+
 export type ArticleType = {
   id: string;
   name: string;
@@ -6,9 +11,10 @@ export type ArticleType = {
   description?: string;
   salePrice: number;
   purchasePrice: number;
-  company?: unknown;
-  category?: unknown;
-  createdBy?: unknown;
+  taxes?: TaxType[];
+  company?: CompanyType;
+  category?: CategoryType;
+  createdBy?: UserType;
   createdAt: Date;
   updatedAt: Date;
 };

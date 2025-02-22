@@ -13,9 +13,12 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { convertNullToUndefined } from "@/lib";
+import { Button } from "@/components/ui/button";
 
 export function ArticleCopyPage() {
   const { articleId } = useParams();
@@ -48,10 +51,10 @@ export function ArticleCopyPage() {
 
   const form = useFormik<UpdateArticlePayloadType>({
     initialValues: {
-      name: article?.name,
+      ...convertNullToUndefined(article),
       type: article?.type as ArticleTypeEnum,
-      salePrice: article?.salePrice,
-      purchasePrice: article?.purchasePrice,
+      categoryId: article?.category?.id,
+      taxIds: article?.taxes?.map(({ id }) => id),
     },
     validationSchema,
     onSubmit: (values) => updateArticle(values),
@@ -68,7 +71,19 @@ export function ArticleCopyPage() {
           <DialogTitle>Copie</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
+
         <ArticleForm form={form} />
+
+        <DialogFooter className="flex justify-end gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate("/articles")}
+          >
+            Annuler
+          </Button>
+          <Button onClick={() => form.submitForm()}>Confirmer</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
