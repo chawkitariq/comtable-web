@@ -37,7 +37,7 @@ export function InvoiceNewPage() {
   return (
     <main className="grid grid-cols-[auto_65%] gap-4 p-4">
       <div className="grid gap-4">
-        <ScrollArea className="h-[85vh] pr-4">
+        <ScrollArea className="h-[81vh] pr-4">
           <InvoiceForm form={form} />
         </ScrollArea>
         <div className="flex justify-end gap-4 place-self-end">

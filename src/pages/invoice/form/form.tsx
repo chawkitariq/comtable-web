@@ -14,6 +14,15 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -23,6 +32,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Table,
   TableBody,
   TableCell,
@@ -30,13 +44,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useAlertDialogConfirmRemove } from "@/hooks";
+import { convertNullToUndefined } from "@/lib";
+import { ArticleApiService } from "@/services";
 import { ContactApiService } from "@/services/contact-api";
 import { useSessionStore } from "@/stores";
-import {
-  ArticleTypeEnum,
-  CreateDocumentPayloadType,
-  TaxTypeEnum,
-} from "@/types";
+import { CreateDocumentPayloadType, TaxTypeEnum } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import {
@@ -47,7 +60,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
 interface InvoiceFormProps {
   form: ReturnType<typeof useFormik<CreateDocumentPayloadType>>;
@@ -57,16 +70,21 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
   const [isContactFormVisible, setIsContactFormVisible] = useState(false);
   const [selectedContactId, setSelectedContactId] = useState("");
   const [documentArticleIndex, setDocumentArticleIndex] = useState<number>();
+  const [isArticlePopoverOpen, setIsArticlePopoverOpen] = useState(false);
 
   const { company } = useSessionStore();
 
   const { data: contacts } = useQuery({
     queryKey: ["contacts"],
-    queryFn: () => ContactApiService.findAll(company?.id!),
+    queryFn: () => ContactApiService.findAll(company.id!),
     enabled: Boolean(company?.id),
   });
 
-  const items = useMemo(() => contacts ?? [], [contacts]);
+  const { data: articles } = useQuery({
+    queryKey: ["articles"],
+    queryFn: () => ArticleApiService.findAll(company.id!),
+    enabled: Boolean(company?.id),
+  });
 
   const handleSelectedContact = useCallback(
     (contactId: string) => {
@@ -83,6 +101,8 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
     },
     [contacts, form]
   );
+
+  const alertDialogConfirmRemove = useAlertDialogConfirmRemove();
 
   return (
     <form onSubmit={form.handleSubmit}>
@@ -106,7 +126,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                 <Combobox
                   value={selectedContactId}
                   onSelect={handleSelectedContact}
-                  items={items.map((contact) => ({
+                  items={contacts?.map((contact) => ({
                     label: contact.name,
                     value: contact.id,
                   }))}
@@ -268,13 +288,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                 <>
                   <CardContent>
                     <Table>
-                      <TableHeader>
-                        <TableRow className="hover:bg-white grid grid-cols-[auto_3fr_1fr]">
-                          <TableHead></TableHead>
-                          <TableHead>Nom</TableHead>
-                          <TableHead></TableHead>
-                        </TableRow>
-                      </TableHeader>
+                      <TableHeader></TableHeader>
                       <TableBody>
                         {form.values.documentArticles?.map((_, i) => (
                           <TableRow
@@ -285,13 +299,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                               <GripVertical />
                             </TableCell>
                             <TableCell>
-                              <Input
-                                id={`documentArticles.${documentArticleIndex}.documentArticleTaxes.${i}.name`}
-                                name={`documentArticles.${documentArticleIndex}.documentArticleTaxes.${i}.name`}
-                                value={form.values.documentArticles?.[i].name}
-                                onChange={form.handleChange}
-                                onBlur={form.handleBlur}
-                              />
+                              {form.values.documentArticles?.[i].name}
                             </TableCell>
 
                             <TableCell>
@@ -307,7 +315,11 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                                 type="button"
                                 size="icon"
                                 variant="ghost"
-                                onClick={() => remove(i)}
+                                onClick={() =>
+                                  alertDialogConfirmRemove().then(
+                                    (isConfirm) => isConfirm && remove(i)
+                                  )
+                                }
                               >
                                 <Trash2 />
                               </Button>
@@ -318,25 +330,67 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                     </Table>
                   </CardContent>
                   <CardFooter className="grid place-items-end">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={() => {
-                        push({
-                          name: "#",
-                          description: "#",
-                          price: 0,
-                          quantity: 0,
-                          total: 0,
-                          type: ArticleTypeEnum.Product,
-                        });
-                        setDocumentArticleIndex(
-                          form.values.documentArticles?.length
-                        );
-                      }}
+                    <Popover
+                      open={isArticlePopoverOpen}
+                      onOpenChange={setIsArticlePopoverOpen}
                     >
-                      <Plus /> Ajouter un article
-                    </Button>
+                      <PopoverTrigger asChild>
+                        <Button type="button" variant="ghost">
+                          <Plus /> Ajouter un article
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="p-0" side="left" align="start">
+                        <Command>
+                          <CommandInput placeholder="Rechercher un article..." />
+                          <CommandList>
+                            <CommandEmpty>Aucun résultat trouvé.</CommandEmpty>
+                            <CommandGroup>
+                              {articles?.map((article) => (
+                                <CommandItem
+                                  key={article.id}
+                                  value={article.id}
+                                  onSelect={() => {
+                                    push({
+                                      ...convertNullToUndefined(article),
+                                      price: article.salePrice,
+                                      quantity: 0,
+                                      total: 0,
+                                    });
+                                    setDocumentArticleIndex(
+                                      form.values.documentArticles?.length
+                                    );
+                                    setIsArticlePopoverOpen(false);
+                                  }}
+                                >
+                                  {article.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                            <CommandSeparator />
+                            <CommandItem
+                              onSelect={() => {
+                                push({
+                                  name: "#",
+                                  description: "#",
+                                  price: 0,
+                                  quantity: 0,
+                                  total: 0,
+                                });
+                                setDocumentArticleIndex(
+                                  form.values.documentArticles?.length
+                                );
+                                setIsArticlePopoverOpen(false);
+                              }}
+                            >
+                              <div className="flex items-center gap-2 p-1">
+                                <Plus className="size-4" />
+                                Ajouter un article
+                              </div>
+                            </CommandItem>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </CardFooter>
                 </>
               )}
