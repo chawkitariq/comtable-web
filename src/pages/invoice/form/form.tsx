@@ -53,6 +53,7 @@ import { FieldArray, FormikProvider, useFormik } from "formik";
 import {
   ChevronDown,
   ChevronUp,
+  Copy,
   GripVertical,
   Pencil,
   Plus,
@@ -293,7 +294,7 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                     <Table>
                       <TableHeader></TableHeader>
                       <TableBody>
-                        {form.values.documentArticles?.map((_, i) => (
+                        {form.values.documentArticles?.map((article, i) => (
                           <TableRow
                             key={i}
                             className="hover:bg-white grid grid-cols-[auto_3fr_1fr] items-center"
@@ -313,6 +314,17 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
                                 onClick={() => setDocumentArticleIndex(i)}
                               >
                                 <Pencil />
+                              </Button>
+                              <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => {
+                                  push(article);
+                                  setDocumentArticleIndex(i);
+                                }}
+                              >
+                                <Copy />
                               </Button>
                               <Button
                                 type="button"

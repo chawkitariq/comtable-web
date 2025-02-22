@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { InvoiceDefaultTemplate } from "@/components";
 import { convertNullToUndefined } from "@/lib/utils";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export function InvoiceEditPage() {
   const { invoiceId } = useParams();
@@ -45,11 +46,10 @@ export function InvoiceEditPage() {
   });
 
   return (
-    <main className="grid grid-cols-[auto_60%] gap-4">
+    <main className="grid grid-cols-[35%_1fr] gap-8 p-4">
       <div className="grid gap-4">
-        <ScrollArea className="h-[85vh] pr-4">
-          <InvoiceForm form={form} />
-        </ScrollArea>
+        <InvoiceForm form={form} />
+
         <div className="flex justify-end gap-4 place-self-end">
           <Button
             type="button"
@@ -61,9 +61,9 @@ export function InvoiceEditPage() {
           <Button onClick={() => form.submitForm()}>Confirmer</Button>
         </div>
       </div>
-      <div className="h-full w-full p-9 bg-gray-100">
+      <AspectRatio className="p-4 bg-gray-100">
         <InvoiceDefaultTemplate invoice={form.values as DocumentType} />
-      </div>
+      </AspectRatio>
     </main>
   );
 }

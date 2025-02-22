@@ -3,7 +3,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -19,13 +18,18 @@ export function InvoiceDefaultTemplate({
 }: InvoiceDefaultTemplateProps) {
   const { company } = useSessionStore();
   return (
-    <div className="h-full w-full grid grid-rows-3 p-4 bg-white max-w-xl mx-auto">
+    <div className="h-full w-full grid grid-rows-[1fr_1fr_4fr_1fr_1fr] gap-24 bg-white p-8 max-w-3xl mx-auto text-primary/85">
       <div>
         <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight mb-4">
           Facture
         </h1>
+      </div>
 
-        <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2">
+        <div>
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+            Émetteur
+          </h4>
           <ul>
             <li>{company?.name}</li>
             <li>{company?.address}</li>
@@ -35,6 +39,12 @@ export function InvoiceDefaultTemplate({
             </li>
             <li>{company?.email}</li>
           </ul>
+        </div>
+
+        <div>
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+            Destinataire
+          </h4>
           <ul>
             <li>{invoice.contactName}</li>
             <li>{invoice.contactAddress}</li>
@@ -48,57 +58,57 @@ export function InvoiceDefaultTemplate({
         </div>
       </div>
 
-      <div className="grid">
-        <Table className="border">
-          <TableHeader>
-            <TableRow className="grid grid-cols-4">
-              <TableHead className="border py-2">Déscription</TableHead>
-              <TableHead className="border py-2">Quantité</TableHead>
-              <TableHead className="border py-2">Prix Unitaire HT</TableHead>
-              <TableHead className="border py-2">Montant HT</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {invoice.documentArticles?.map((documentArticle, i) => (
-              <TableRow key={i} className="grid grid-cols-4">
-                <TableCell className="border">
-                  {documentArticle.description}
-                </TableCell>
-                <TableCell className="border">
-                  {documentArticle.price} ${invoice.currencyCode}
-                </TableCell>
-                <TableCell className="border">
-                  {documentArticle.quantity}
-                </TableCell>
-                <TableCell className="border">
-                  {documentArticle.price * documentArticle.quantity} $
-                  {invoice.currencyCode}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow className="grid grid-cols-4">
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>Total</TableCell>{" "}
+      <Table>
+        <TableHeader>
+          <TableRow className="grid grid-cols-[1fr_3fr_repeat(3,_1fr)] bg-primary/90 text-primary-foreground shadow hover:bg-primary/90">
+            <TableHead className="text-inherit py-2">Nom</TableHead>
+            <TableHead className="text-inherit py-2">Description</TableHead>
+            <TableHead className="text-inherit py-2">Quantité</TableHead>
+            <TableHead className="text-inherit py-2">Prix unitaire</TableHead>
+            <TableHead className="text-inherit py-2">Montant</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {invoice.documentArticles?.map((documentArticle, i) => (
+            <TableRow
+              key={i}
+              className="grid grid-cols-[1fr_3fr_repeat(3,_1fr)]"
+            >
+              <TableCell>{documentArticle.name}</TableCell>
+              <TableCell>{documentArticle.description}</TableCell>
               <TableCell>
-                {
-                  invoice.documentArticles
-                    ?.reduce(
-                      (total, documentArticle) =>
-                        total +
-                        documentArticle.price * documentArticle.quantity,
-                      0
-                    )
-                    .toFixed(2)
-                }{" "}
-                ${invoice.currencyCode}
+                {documentArticle.price} ${invoice.currencyCode}
+              </TableCell>
+              <TableCell>{documentArticle.quantity}</TableCell>
+              <TableCell>
+                {documentArticle.price * documentArticle.quantity} $
+                {invoice.currencyCode}
               </TableCell>
             </TableRow>
-          </TableFooter>
-        </Table>
-      </div>
+          ))}
+        </TableBody>
+      </Table>
+
+      <Table className="ml-auto max-w-xs">
+        <TableBody>
+          <TableRow className="flex justify-between items-center gap-4">
+            <TableHead>Total</TableHead>
+            <TableHead>
+              {invoice.documentArticles
+                ?.reduce(
+                  (total, documentArticle) =>
+                    total + documentArticle.price * documentArticle.quantity,
+                  0
+                )
+                .toFixed(2)}{" "}
+              ${invoice.currencyCode}
+            </TableHead>
+          </TableRow>
+          <TableRow></TableRow>
+        </TableBody>
+      </Table>
+
+      <div></div>
     </div>
   );
 }
