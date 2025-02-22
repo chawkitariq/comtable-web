@@ -9,11 +9,13 @@ import {
 } from "@/components/ui/select";
 import { ArticleTypeEnum, UpdateArticlePayloadType } from "@/types";
 import { useFormik } from "formik";
-import { forwardRef, useCallback, useEffect, useMemo, useState } from "react";
-import { Tag, TagInput } from "emblor";
+import { forwardRef, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { TaxApiService } from "@/services";
 import { useSessionStore } from "@/stores";
+import MultipleSelector, {
+  Option,
+} from "@/components/customs/multiple-selector";
 
 interface ArticleFormProps {
   form: ReturnType<typeof useFormik<UpdateArticlePayloadType>>;
@@ -21,18 +23,39 @@ interface ArticleFormProps {
 
 export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
   ({ form }, ref) => {
-    const [activeTaxesTagIndex, setActiveTaxesTagIndex] = useState<
-      number | null
-    >(null);
-
-    const [taxesTags, setTaxesTags] = useState<Tag[]>([]);
-
     const { company } = useSessionStore();
 
     const { data: taxes } = useQuery({
       queryKey: ["taxes"],
       queryFn: () => TaxApiService.findAll(company.id!),
     });
+
+    const handleTaxesOptionsChange = useCallback(
+      (options: Option[]) =>
+        form.setFieldValue(
+          "taxIds",
+          options.map(({ value }) => value)
+        ),
+      [form]
+    );
+
+    const taxesOptionsValue = useMemo(
+      () =>
+        taxes
+          ?.filter(({ id }) => form.values.taxIds?.includes(id))
+          .map(({ id, name }) => ({ label: name, value: id })),
+      [taxes, form]
+    );
+
+    const defaultTaxesOptions: Option[] = useMemo(
+      () =>
+        taxes?.map(({ id, name }) => ({
+          label: name,
+          value: id,
+          [id]: id,
+        })) ?? [],
+      [taxes]
+    );
 
     return (
       <form
@@ -100,14 +123,16 @@ export const ArticleForm = forwardRef<HTMLFormElement, ArticleFormProps>(
 
           <div className="grid gap-4">
             <Label htmlFor="purchasePrice">Taxes</Label>
-            <TagInput
-              tags={taxes?.map()}
-              setTags={setTaxesTags}
-              placeholder="Sélectionner des taxes"
-              activeTagIndex={activeTaxesTagIndex}
-              setActiveTagIndex={setActiveTaxesTagIndex}
-              enableAutocomplete={true}
-              restrictTagsToAutocompleteOptions={true}
+            <MultipleSelector
+              value={taxesOptionsValue}
+              onChange={handleTaxesOptionsChange}
+              defaultOptions={defaultTaxesOptions}
+              placeholder="Sélectionner les taxes..."
+              emptyIndicator={
+                <p className="text-center leading-10 text-gray-600 dark:text-gray-400">
+                  Aucun résultat trouvé
+                </p>
+              }
             />
           </div>
         </div>
