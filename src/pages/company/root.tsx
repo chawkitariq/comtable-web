@@ -123,7 +123,7 @@ export function CompanyRootPage() {
         cell: ({ row }) => {
           const item = row.original;
           return (
-            <div className="grid gap-2 grid-cols-[repeat(3,_min-content)]">
+            <div className="grid gap-2 grid-cols-[repeat(2,_min-content)]">
               <Button
                 size="sm"
                 onClick={() => setCompany(item)}
