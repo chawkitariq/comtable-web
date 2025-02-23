@@ -7,11 +7,13 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { TaxApiService } from "@/services";
-import { TaxForm, validationSchema } from "./form";
+import { TaxForm, taxFormValidationSchema } from "./form";
+import { Button } from "@/components/ui/button";
 
 export function TaxNewPage() {
   const navigate = useNavigate();
@@ -22,9 +24,8 @@ export function TaxNewPage() {
 
   const { mutate: createTax } = useMutation({
     mutationKey: ["taxs"],
-    mutationFn: (payload: CreateTaxPayloadType) => {
-      return TaxApiService.create(company?.id!, payload);
-    },
+    mutationFn: (payload: CreateTaxPayloadType) =>
+      TaxApiService.create(company.id!, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["taxs"] });
       navigate("/taxes");
@@ -34,9 +35,10 @@ export function TaxNewPage() {
   const form = useFormik<CreateTaxPayloadType>({
     initialValues: {
       name: "",
+      rate: 0,
       type: TaxTypeEnum.Normal,
     },
-    validationSchema,
+    validationSchema: taxFormValidationSchema,
     onSubmit: (values) => createTax(values),
   });
 
@@ -50,7 +52,23 @@ export function TaxNewPage() {
           <DialogTitle>Nouveau</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
+
         <TaxForm form={form} />
+
+        <DialogFooter>
+          <div className="flex justify-end gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate("/taxes")}
+            >
+              Annuler
+            </Button>
+            <Button type="submit" onClick={() => form.submitForm()}>
+              Confirmer
+            </Button>
+          </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

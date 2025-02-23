@@ -75,19 +75,19 @@ export const InvoiceForm = ({ form }: InvoiceFormProps) => {
   const { company } = useSessionStore();
 
   const { data: contacts } = useQuery({
-    queryKey: ["contacts"],
+    queryKey: ["contacts", company],
     queryFn: () => ContactApiService.findAll(company.id!),
     enabled: Boolean(company?.id),
   });
 
   const { data: articles } = useQuery({
-    queryKey: ["articles"],
+    queryKey: ["articles", company],
     queryFn: () => ArticleApiService.findAll(company.id!),
     enabled: Boolean(company?.id),
   });
 
   const { data: taxes } = useQuery({
-    queryKey: ["taxes"],
+    queryKey: ["taxes", company],
     queryFn: () => TaxApiService.findAll(company.id!),
     enabled: Boolean(company?.id),
   });

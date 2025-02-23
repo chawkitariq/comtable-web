@@ -11,7 +11,6 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowUpDown, Copy, MoreVertical, Pencil, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +24,7 @@ import { Outlet, useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
 import { TaxApiService } from "@/services";
 import { DataTable } from "@/components/data-table";
+import { useAlertDialogConfirmRemove } from "@/hooks";
 
 export function TaxRootPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -34,53 +34,31 @@ export function TaxRootPage() {
 
   const { company } = useSessionStore();
 
-  const { data: taxs } = useQuery({
-    queryKey: ["taxs", company?.id],
-    queryFn: () => TaxApiService.findAll(company?.id!),
+  const { data: taxes } = useQuery({
+    queryKey: ["taxes", company],
+    queryFn: () => TaxApiService.findAll(company.id!),
     enabled: Boolean(company?.id),
   });
 
   const queryClient = useQueryClient();
 
   const { mutate: deleteTax } = useMutation({
-    mutationKey: ["taxs"],
+    mutationKey: ["taxes"],
     mutationFn: TaxApiService.delete,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["taxs"] });
+      queryClient.invalidateQueries({ queryKey: ["taxes"] });
     },
   });
 
   const navigate = useNavigate();
 
-  const tableData = useMemo(() => taxs ?? [], [taxs]);
+  const alertDialogConfirmRemove = useAlertDialogConfirmRemove();
+
+  const tableData = useMemo(() => taxes ?? [], [taxes]);
 
   const table = useReactTable({
     data: tableData,
     columns: [
-      {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
       {
         accessorKey: "name",
         header: ({ column }) => {
@@ -165,7 +143,11 @@ export function TaxRootPage() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-red-500"
-                  onClick={() => deleteTax(item.id)}
+                  onClick={() =>
+                    alertDialogConfirmRemove().then(
+                      (isConfirm) => isConfirm && deleteTax(item.id)
+                    )
+                  }
                 >
                   <Trash />
                   Supprimer

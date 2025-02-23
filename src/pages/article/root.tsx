@@ -37,7 +37,7 @@ export function ArticleRootPage() {
 
   const { data: articles } = useQuery({
     queryKey: ["articles", company?.id],
-    queryFn: () => ArticleApiService.findAll(company?.id!),
+    queryFn: () => ArticleApiService.findAll(company.id!),
     enabled: Boolean(company?.id),
   });
 

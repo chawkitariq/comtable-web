@@ -15,21 +15,21 @@ export class TaxApiService {
     return data;
   }
 
-  public static async findOne(contactId: string): Promise<TaxType> {
-    const { data } = await api.get(`/taxes/${contactId}`);
+  public static async findOne(taxId: string): Promise<TaxType> {
+    const { data } = await api.get(`/taxes/${taxId}`);
     return data;
   }
 
   public static async update(
-    contactId: string,
+    taxId: string,
     payload: UpdateTaxPayloadType
   ): Promise<TaxType> {
-    const { data } = await api.patch(`/taxes/${contactId}`, payload);
+    const { data } = await api.patch(`/taxes/${taxId}`, payload);
     return data;
   }
 
-  public static async delete(contactId: string): Promise<unknown> {
-    const { data } = await api.delete(`/taxes/${contactId}`);
+  public static async delete(taxId: string): Promise<unknown> {
+    const { data } = await api.delete(`/taxes/${taxId}`);
     return data;
   }
 }

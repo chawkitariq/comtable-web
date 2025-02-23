@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -8,19 +7,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TaxTypeEnum, UpdateTaxPayloadType } from "@/types";
+import {
+  CreateTaxPayloadType,
+  TaxTypeEnum,
+  UpdateTaxPayloadType,
+} from "@/types";
 import { useFormik } from "formik";
 import { forwardRef } from "react";
-import { useNavigate } from "react-router";
 
 interface TaxFormProps {
-  form: ReturnType<typeof useFormik<UpdateTaxPayloadType>>;
+  form: ReturnType<
+    typeof useFormik<CreateTaxPayloadType | UpdateTaxPayloadType>
+  >;
 }
 
 export const TaxForm = forwardRef<HTMLFormElement, TaxFormProps>(
   ({ form }, ref) => {
-    const navigate = useNavigate();
-
     return (
       <form
         className="grid gap-4 content-between"
@@ -69,17 +71,6 @@ export const TaxForm = forwardRef<HTMLFormElement, TaxFormProps>(
               onBlur={form.handleBlur}
             />
           </div>
-        </div>
-
-        <div className="flex justify-end gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => navigate("/taxes")}
-          >
-            Annuler
-          </Button>
-          <Button type="submit">Confirmer</Button>
         </div>
       </form>
     );

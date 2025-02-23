@@ -25,12 +25,12 @@ import {
   BookUser,
   ChevronsUpDown,
   Percent,
-  Plus,
   ReceiptText,
+  Settings,
   Tag,
 } from "lucide-react";
 import React from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 
 export function DefaultLayoutCompanySidebar() {
   const { company: sessionCompany, setCompany } = useSessionStore();
@@ -69,25 +69,21 @@ export function DefaultLayoutCompanySidebar() {
                 </DropdownMenuLabel>
                 {companies?.map((company) => (
                   <React.Fragment key={company.id}>
-                    {sessionCompany.id !== company.id && (
-                      <DropdownMenuItem
-                        key={company.id}
-                        onClick={() => setCompany(company)}
-                        className="gap-2 p-2"
-                      >
-                        {company.name}
-                      </DropdownMenuItem>
-                    )}
+                    <DropdownMenuItem
+                      key={company.id}
+                      onClick={() => setCompany(company)}
+                      className="gap-2 p-2"
+                    >
+                      {company.name}
+                    </DropdownMenuItem>
                   </React.Fragment>
                 ))}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="gap-2 p-2">
-                  <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                    <Plus className="size-4" />
-                  </div>
-                  <div className="font-medium text-muted-foreground">
-                    Ajouter une entreprise
-                  </div>
+                <DropdownMenuItem asChild>
+                  <Link to="/companies">
+                    <Settings className="size-4" />
+                    <span>Gérer les entreprises</span>
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

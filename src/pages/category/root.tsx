@@ -25,6 +25,7 @@ import { Outlet, useNavigate } from "react-router";
 import { useSessionStore } from "@/stores";
 import { CategoryApiService } from "@/services";
 import { DataTable } from "@/components/data-table";
+import { useAlertDialogConfirmRemove } from "@/hooks";
 
 export function CategoryRootPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -36,7 +37,7 @@ export function CategoryRootPage() {
 
   const { data: categorys } = useQuery({
     queryKey: ["categorys", company?.id],
-    queryFn: () => CategoryApiService.findAll(company?.id!),
+    queryFn: () => CategoryApiService.findAll(company.id!),
     enabled: Boolean(company?.id),
   });
 
@@ -51,6 +52,8 @@ export function CategoryRootPage() {
   });
 
   const navigate = useNavigate();
+
+  const alertDialogConfirmRemove = useAlertDialogConfirmRemove();
 
   const tableData = useMemo(() => categorys ?? [], [categorys]);
 
@@ -146,7 +149,11 @@ export function CategoryRootPage() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-red-500"
-                  onClick={() => deleteCategory(item.id)}
+                  onClick={() =>
+                    alertDialogConfirmRemove().then(
+                      (isConfirm) => isConfirm && deleteCategory(item.id)
+                    )
+                  }
                 >
                   <Trash />
                   Supprimer
