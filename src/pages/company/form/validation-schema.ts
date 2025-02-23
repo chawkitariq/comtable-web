@@ -1,5 +1,5 @@
 import { object, string } from "yup";
 
-export const validationSchema = object().shape({
+export const companyFormValidationSchema = object().shape({
   name: string().required("Obligatoire"),
 });

@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CompanyApiService } from "@/services/company-api";
-import { CompanyForm, validationSchema } from "./form";
+import { CompanyForm, companyFormValidationSchema } from "./form";
 
 export function CompanyNewPage() {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export function CompanyNewPage() {
     initialValues: {
       name: "",
     },
-    validationSchema,
+    validationSchema: companyFormValidationSchema,
     onSubmit: (values) => createCompany(values),
   });
 
