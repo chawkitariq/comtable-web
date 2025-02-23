@@ -20,14 +20,19 @@ export function InvoiceDefaultTemplate({
   return (
     <div className="h-full w-full grid grid-rows-[1fr_1fr_4fr_1fr_1fr] gap-24 bg-white p-8 max-w-3xl mx-auto text-primary/85">
       <div>
-        <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight mb-4">
-          Facture
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Facture {invoice.number}
         </h1>
+        <h2 className="text-xl font-semibold tracking-tight text-primary/60">
+          {invoice.issuedAt.toLocaleDateString('fr-FR', {
+            dateStyle: 'long'
+          })}
+        </h2>
       </div>
 
       <div className="grid grid-cols-2">
         <div>
-          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+          <h4 className="text-xl font-semibold tracking-tight">
             Émetteur
           </h4>
           <ul>
@@ -42,7 +47,7 @@ export function InvoiceDefaultTemplate({
         </div>
 
         <div>
-          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+          <h4 className="text-xl font-semibold tracking-tight">
             Destinataire
           </h4>
           <ul>

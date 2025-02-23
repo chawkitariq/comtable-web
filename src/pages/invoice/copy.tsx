@@ -3,12 +3,13 @@ import { useNavigate, useParams } from "react-router";
 import { useFormik } from "formik";
 import { CreateDocumentPayloadType } from "@/types";
 import { DocumentInvoiceApiService } from "@/services";
-import { InvoiceForm, validationSchema } from "./form";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { InvoiceDefaultTemplate } from "@/components";
 import { convertNullToUndefined } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { InvoiceForm, invoiceFormValidationSchema } from "./form";
+import { useSessionStore } from "@/stores";
 
 export function InvoiceCopyPage() {
   const { invoiceId } = useParams();
@@ -21,13 +22,14 @@ export function InvoiceCopyPage() {
 
   const navigate = useNavigate();
 
+  const { company } = useSessionStore();
+
   const queryClient = useQueryClient();
 
   const { mutate: createInvoice } = useMutation({
-    mutationKey: ["invoices", invoiceId],
-    mutationFn: (payload: CreateDocumentPayloadType) => {
-      return DocumentInvoiceApiService.create(invoiceId!, payload);
-    },
+    mutationKey: ["invoices", company],
+    mutationFn: (payload: CreateDocumentPayloadType) =>
+      DocumentInvoiceApiService.create(company.id!, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["invoices"] });
       navigate("/invoices");
@@ -40,15 +42,17 @@ export function InvoiceCopyPage() {
       issuedAt: invoice?.issuedAt ? new Date(invoice?.issuedAt) : undefined,
       dueAt: invoice?.dueAt ? new Date(invoice?.dueAt) : undefined,
     },
-    validationSchema,
+    validationSchema: invoiceFormValidationSchema,
     onSubmit: (values) => createInvoice(values),
     enableReinitialize: true,
   });
 
   return (
-    <main className="grid grid-cols-[35%_1fr] gap-8 p-4">
+    <main className="grid grid-cols-[40%_1fr] gap-8 p-4">
       <div className="grid gap-4">
-        <InvoiceForm form={form} />
+        <ScrollArea className="h-[1080px]">
+          <InvoiceForm form={form} />
+        </ScrollArea>
 
         <div className="flex justify-end gap-4 place-self-end">
           <Button

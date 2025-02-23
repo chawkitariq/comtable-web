@@ -9,6 +9,7 @@ import { InvoiceForm } from "./form";
 import { InvoiceDefaultTemplate } from "@/components/invoice-template";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { generateDocumentNumber } from "@/lib";
 
 export function InvoiceNewPage() {
   const navigate = useNavigate();
@@ -30,6 +31,8 @@ export function InvoiceNewPage() {
 
   const form = useFormik<CreateDocumentPayloadType>({
     initialValues: {
+      number: generateDocumentNumber(),
+      issuedAt: new Date(),
       documentArticles: [],
     },
     onSubmit: (values) => createInvoice(values),
@@ -38,7 +41,7 @@ export function InvoiceNewPage() {
   return (
     <main className="grid grid-cols-[40%_1fr] gap-8 p-4">
       <div className="grid gap-4">
-        <ScrollArea className="max-h-[1080px]">
+        <ScrollArea className="h-[1080px]">
           <InvoiceForm form={form} />
         </ScrollArea>
 
@@ -53,6 +56,7 @@ export function InvoiceNewPage() {
           <Button onClick={() => form.submitForm()}>Confirmer</Button>
         </div>
       </div>
+
       <AspectRatio className="p-4 bg-gray-100">
         <InvoiceDefaultTemplate invoice={form.values as DocumentType} />
       </AspectRatio>
