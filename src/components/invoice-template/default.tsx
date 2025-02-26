@@ -3,7 +3,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -19,22 +18,34 @@ export function InvoiceDefaultTemplate({
 }: InvoiceDefaultTemplateProps) {
   const { company } = useSessionStore();
   return (
-    <div className="h-full w-full grid grid-rows-3 p-4 bg-white max-w-xl mx-auto">
+    <div className="h-full w-full grid grid-rows-[1fr_1fr_4fr_1fr_1fr] gap-12 bg-white p-8 max-w-3xl mx-auto text-primary/85">
       <div>
-        <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight mb-4">
-          Facture
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Facture {invoice.number}
         </h1>
+        <h2 className="text-xl font-semibold tracking-tight text-primary/60">
+          {invoice.issuedAt.toLocaleDateString("fr-FR", {
+            dateStyle: "long",
+          })}
+        </h2>
+      </div>
 
-        <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 gap-12">
+        <div className="grid gap-2">
+          <h4 className="text-xl font-semibold tracking-tight">Émetteur</h4>
           <ul>
             <li>{company?.name}</li>
             <li>{company?.address}</li>
             <li>
-              <span>{company?.postalCode}</span>
-              <span>{company?.city}</span>
+              <span>{company?.postalCode}</span> <span>{company?.city}</span>
             </li>
+            <li>{company?.country}</li>
             <li>{company?.email}</li>
           </ul>
+        </div>
+
+        <div className="grid gap-2">
+          <h4 className="text-xl font-semibold tracking-tight">Destinataire</h4>
           <ul>
             <li>{invoice.contactName}</li>
             <li>{invoice.contactAddress}</li>
@@ -42,63 +53,66 @@ export function InvoiceDefaultTemplate({
               <span>{invoice.contactPostalCode}</span>{" "}
               <span>{invoice.contactCity}</span>
             </li>
-            <li>{invoice.contactPhone}</li>
+            <li>{invoice.contactCountry}</li>
             <li>{invoice.contactEmail}</li>
           </ul>
         </div>
       </div>
 
-      <div className="grid">
-        <Table className="border">
+      <div className="grid gap-8">
+        <Table>
           <TableHeader>
-            <TableRow className="grid grid-cols-4">
-              <TableHead className="border py-2">Déscription</TableHead>
-              <TableHead className="border py-2">Quantité</TableHead>
-              <TableHead className="border py-2">Prix Unitaire HT</TableHead>
-              <TableHead className="border py-2">Montant HT</TableHead>
+            <TableRow className="bg-primary/90 text-primary-foreground shadow hover:bg-primary/90">
+              <TableHead className="text-inherit py-2">Type</TableHead>
+              <TableHead className="text-inherit py-2 max-w-[250px]">
+                Description
+              </TableHead>
+              <TableHead className="text-inherit py-2">
+                Prix unitaire HT
+              </TableHead>
+              <TableHead className="text-inherit py-2">Quantité</TableHead>
+              <TableHead className="text-inherit py-2">Total HT</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {invoice.documentArticles?.map((documentArticle, i) => (
-              <TableRow key={i} className="grid grid-cols-4">
-                <TableCell className="border">
+              <TableRow key={i}>
+                <TableCell>{documentArticle.type}</TableCell>
+                <TableCell className="max-w-[250px] break-words">
                   {documentArticle.description}
                 </TableCell>
-                <TableCell className="border">
+                <TableCell>
                   {documentArticle.price} ${invoice.currencyCode}
                 </TableCell>
-                <TableCell className="border">
-                  {documentArticle.quantity}
-                </TableCell>
-                <TableCell className="border">
-                  {documentArticle.price * documentArticle.quantity} $
-                  {invoice.currencyCode}
+                <TableCell>{documentArticle.quantity}</TableCell>
+                <TableCell>
+                  {documentArticle.total} ${invoice.currencyCode}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
-            <TableRow className="grid grid-cols-4">
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>Total</TableCell>{" "}
-              <TableCell>
-                {
-                  invoice.documentArticles
-                    ?.reduce(
-                      (total, documentArticle) =>
-                        total +
-                        documentArticle.price * documentArticle.quantity,
-                      0
-                    )
-                    .toFixed(2)
-                }{" "}
+        </Table>
+
+        <Table className="ml-auto max-w-xs">
+          <TableBody>
+            <TableRow className="flex justify-between items-center gap-4">
+              <TableHead>Total</TableHead>
+              <TableHead>
+                {invoice.documentArticles
+                  ?.reduce(
+                    (total, documentArticle) => total + documentArticle.total,
+                    0
+                  )
+                  .toFixed(2)}{" "}
                 ${invoice.currencyCode}
-              </TableCell>
+              </TableHead>
             </TableRow>
-          </TableFooter>
+            <TableRow></TableRow>
+          </TableBody>
         </Table>
       </div>
+
+      <div></div>
     </div>
   );
 }

@@ -17,11 +17,11 @@ import {
 import { useState } from "react";
 
 interface ComboboxProps {
-  items: {
+  items?: {
     label: string;
     value: string;
   }[];
-  value: string;
+  value?: string;
   onSelect?: (value: string) => unknown;
   placeholder?: string;
   searchPlaceholder?: string;

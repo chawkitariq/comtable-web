@@ -6,17 +6,20 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { TaxApiService } from "@/services";
-import { TaxForm, validationSchema } from "./form";
+import { TaxForm, taxFormValidationSchema } from "./form";
+import { convertNullToUndefined } from "@/lib";
+import { Button } from "@/components/ui/button";
 
 export function TaxEditPage() {
   const { taxId } = useParams();
 
   const { data: tax } = useQuery({
-    queryKey: ["taxs", taxId],
+    queryKey: ["taxes", taxId],
     queryFn: () => TaxApiService.findOne(taxId!),
     enabled: Boolean(taxId),
   });
@@ -26,22 +29,18 @@ export function TaxEditPage() {
   const queryClient = useQueryClient();
 
   const { mutate: updateTax } = useMutation({
-    mutationKey: ["taxs", taxId],
-    mutationFn: (payload: UpdateTaxPayloadType) => {
-      return TaxApiService.update(taxId!, payload);
-    },
+    mutationKey: ["taxes", taxId],
+    mutationFn: (payload: UpdateTaxPayloadType) =>
+      TaxApiService.update(taxId!, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["taxs"] });
+      queryClient.invalidateQueries({ queryKey: ["taxes"] });
       navigate("/taxes");
     },
   });
 
   const form = useFormik<UpdateTaxPayloadType>({
-    initialValues: {
-      name: tax?.name,
-      type: tax?.type,
-    },
-    validationSchema,
+    initialValues: convertNullToUndefined(tax),
+    validationSchema: taxFormValidationSchema,
     onSubmit: (values) => updateTax(values),
     enableReinitialize: true,
   });
@@ -56,7 +55,23 @@ export function TaxEditPage() {
           <DialogTitle>Edition</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
+
         <TaxForm form={form} />
+
+        <DialogFooter>
+          <div className="flex justify-end gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate("/taxes")}
+            >
+              Annuler
+            </Button>
+            <Button type="submit" onClick={() => form.submitForm()}>
+              Confirmer
+            </Button>
+          </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -57,3 +57,8 @@ export function isValidUuidV4(uuid: string): boolean {
 
   return pattern.test(uuid);
 }
+
+export function generateDocumentNumber(referenceNumber = 0): string {
+  const incrementedRef = (referenceNumber + 1).toString().padStart(6, "0");
+  return `INV-${incrementedRef}`;
+}

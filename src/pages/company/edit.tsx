@@ -10,7 +10,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CompanyApiService } from "@/services/company-api";
-import { CompanyForm, validationSchema } from "./form";
+import { CompanyForm, companyFormValidationSchema } from "./form";
+import { convertNullToUndefined } from "@/lib";
 
 export function CompanyEditPage() {
   const { companyId } = useParams();
@@ -27,9 +28,8 @@ export function CompanyEditPage() {
 
   const { mutate: updateCompany } = useMutation({
     mutationKey: ["companies", companyId],
-    mutationFn: (payload: UpdateCompanyPayloadType) => {
-      return CompanyApiService.update(companyId!, payload);
-    },
+    mutationFn: (payload: UpdateCompanyPayloadType) =>
+      CompanyApiService.update(companyId!, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["companies"] });
       navigate("/companies");
@@ -37,10 +37,8 @@ export function CompanyEditPage() {
   });
 
   const form = useFormik<UpdateCompanyPayloadType>({
-    initialValues: {
-      name: company?.name,
-    },
-    validationSchema,
+    initialValues: convertNullToUndefined(company),
+    validationSchema: companyFormValidationSchema,
     onSubmit: (values) => updateCompany(values),
     enableReinitialize: true,
   });

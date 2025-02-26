@@ -25,7 +25,7 @@ export function ContactNewPage() {
   const { mutate: createContact } = useMutation({
     mutationKey: ["contacts"],
     mutationFn: (payload: CreateContactPayloadType) =>
-      ContactApiService.create(company?.id!, payload),
+      ContactApiService.create(company.id!, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["contacts"] });
       navigate("/contacts");
@@ -62,7 +62,9 @@ export function ContactNewPage() {
           >
             Annuler
           </Button>
-          <Button type="submit">Confirmer</Button>
+          <Button type="submit" onClick={() => form.submitForm()}>
+            Confirmer
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

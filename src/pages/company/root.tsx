@@ -11,7 +11,6 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowUpDown, MoreVertical, Pencil, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,30 +55,6 @@ export function CompanyRootPage() {
     data: tableData,
     columns: [
       {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
-      {
         accessorKey: "name",
         header: ({ column }) => {
           return (
@@ -123,7 +98,7 @@ export function CompanyRootPage() {
         cell: ({ row }) => {
           const item = row.original;
           return (
-            <div className="grid gap-2 grid-cols-[repeat(3,_min-content)]">
+            <div className="grid gap-2 grid-cols-[repeat(2,_min-content)]">
               <Button
                 size="sm"
                 onClick={() => setCompany(item)}

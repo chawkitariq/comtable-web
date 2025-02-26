@@ -14,7 +14,7 @@ export type TaxType = {
 
 export type CreateTaxPayloadType = {
   name: string;
-  rate?: number;
+  rate: number;
   type: TaxTypeEnum;
 };
 

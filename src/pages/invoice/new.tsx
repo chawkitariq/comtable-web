@@ -7,7 +7,9 @@ import { DocumentInvoiceApiService } from "@/services";
 import { Button } from "@/components/ui/button";
 import { InvoiceForm } from "./form";
 import { InvoiceDefaultTemplate } from "@/components/invoice-template";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { generateDocumentNumber } from "@/lib";
 
 export function InvoiceNewPage() {
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ export function InvoiceNewPage() {
   const { mutate: createInvoice } = useMutation({
     mutationKey: ["invoices"],
     mutationFn: (payload: CreateDocumentPayloadType) => {
-      return DocumentInvoiceApiService.create(company?.id!, payload);
+      return DocumentInvoiceApiService.create(company.id!, payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["invoices"] });
@@ -29,17 +31,20 @@ export function InvoiceNewPage() {
 
   const form = useFormik<CreateDocumentPayloadType>({
     initialValues: {
+      number: generateDocumentNumber(),
+      issuedAt: new Date(),
       documentArticles: [],
     },
     onSubmit: (values) => createInvoice(values),
   });
 
   return (
-    <main className="grid grid-cols-[auto_65%] gap-4 p-4">
+    <main className="grid grid-cols-[40%_1fr] gap-8 p-4">
       <div className="grid gap-4">
-        <ScrollArea className="h-[85vh] pr-4">
+        <ScrollArea className="h-[1080px]">
           <InvoiceForm form={form} />
         </ScrollArea>
+
         <div className="flex justify-end gap-4 place-self-end">
           <Button
             type="button"
@@ -51,9 +56,10 @@ export function InvoiceNewPage() {
           <Button onClick={() => form.submitForm()}>Confirmer</Button>
         </div>
       </div>
-      <div className="h-full w-full p-9 bg-gray-100">
+
+      <AspectRatio className="p-4 bg-gray-100">
         <InvoiceDefaultTemplate invoice={form.values as DocumentType} />
-      </div>
+      </AspectRatio>
     </main>
   );
 }

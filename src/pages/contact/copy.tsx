@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { ContactForm, contactFormValidationSchema } from "./form";
 import { Button } from "@/components/ui/button";
+import { convertNullToUndefined } from "@/lib";
 
 export function ContactCopyPage() {
   const { contactId } = useParams();
@@ -31,13 +32,12 @@ export function ContactCopyPage() {
   const { company } = useSessionStore();
 
   const { mutate: updateContact } = useMutation({
-    mutationKey: ["contacts", contactId],
-    mutationFn: (payload: UpdateContactPayloadType) => {
-      return ContactApiService.create(
+    mutationKey: ["contacts", company],
+    mutationFn: (payload: UpdateContactPayloadType) =>
+      ContactApiService.create(
         company.id!,
         payload as CreateContactPayloadType
-      );
-    },
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["contacts"] });
       navigate("/contacts");
@@ -45,10 +45,7 @@ export function ContactCopyPage() {
   });
 
   const form = useFormik<UpdateContactPayloadType>({
-    initialValues: {
-      name: contact?.name,
-      type: contact?.type,
-    },
+    initialValues: convertNullToUndefined(contact),
     validationSchema: contactFormValidationSchema,
     onSubmit: (values) => updateContact(values),
     enableReinitialize: true,
@@ -75,7 +72,9 @@ export function ContactCopyPage() {
           >
             Annuler
           </Button>
-          <Button type="submit">Confirmer</Button>
+          <Button type="submit" onClick={() => form.submitForm()}>
+            Confirmer
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

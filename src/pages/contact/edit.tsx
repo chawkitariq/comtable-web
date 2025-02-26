@@ -13,6 +13,7 @@ import {
 import { ContactApiService } from "@/services/contact-api";
 import { ContactForm, contactFormValidationSchema } from "./form";
 import { Button } from "@/components/ui/button";
+import { convertNullToUndefined } from "@/lib";
 
 export function ContactEditPage() {
   const { contactId } = useParams();
@@ -39,10 +40,7 @@ export function ContactEditPage() {
   });
 
   const form = useFormik<UpdateContactPayloadType>({
-    initialValues: {
-      name: contact?.name,
-      type: contact?.type,
-    },
+    initialValues: convertNullToUndefined(contact),
     validationSchema: contactFormValidationSchema,
     onSubmit: (values) => updateContact(values),
     enableReinitialize: true,
@@ -69,7 +67,9 @@ export function ContactEditPage() {
           >
             Annuler
           </Button>
-          <Button type="submit">Confirmer</Button>
+          <Button type="submit" onClick={() => form.submitForm()}>
+            Confirmer
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
