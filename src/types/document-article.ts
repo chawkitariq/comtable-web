@@ -18,7 +18,7 @@ export type DocumentArticleType = {
   tax: number;
   discountType: string;
   discountRate: string;
-  total: string;
+  total: number;
   documentArticleTaxes: DocumentArticleTaxType[];
   company?: CompanyType;
   document?: DocumentType;
