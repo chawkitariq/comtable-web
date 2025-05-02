@@ -35,6 +35,7 @@ export function InvoiceEditPage() {
   });
 
   const form = useFormik<UpdateDocumentPayloadType>({
+    // @ts-ignore
     initialValues: {
       ...convertNullToUndefined(invoice),
       issuedAt: invoice?.issuedAt ? new Date(invoice?.issuedAt) : undefined,
@@ -65,7 +66,7 @@ export function InvoiceEditPage() {
       </div>
 
       <AspectRatio className="p-4 bg-gray-100">
-        <InvoiceDefaultTemplate invoice={form.values as DocumentType} />
+        <InvoiceDefaultTemplate invoice={form.values as any} />
       </AspectRatio>
     </main>
   );

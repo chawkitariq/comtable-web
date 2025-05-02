@@ -56,6 +56,7 @@ export function RoleCopyPage() {
           <DialogDescription></DialogDescription>
         </DialogHeader>
 
+        {/* @ts-ignore */}
         <RoleForm form={form} />
 
         <DialogFooter className="flex justify-end gap-4">

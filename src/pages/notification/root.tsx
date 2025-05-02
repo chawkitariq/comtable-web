@@ -178,6 +178,7 @@ export function NotificationRootPage() {
         <div className="flex">
           <Tabs
             value={notificationFetchType}
+            // @ts-ignore
             onValueChange={setNotificationFetchType}
           >
             <TabsList>

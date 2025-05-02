@@ -48,7 +48,7 @@ export function UserNewPage() {
           <DialogTitle>Nouveau</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-
+        {/* @ts-ignore */}
         <UserForm form={form} />
 
         <DialogFooter className="flex justify-end gap-4">

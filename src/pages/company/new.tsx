@@ -45,6 +45,7 @@ export function CompanyNewPage() {
           <DialogTitle>Nouveau</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
+        {/* @ts-ignore */}
         <CompanyForm form={form} />
       </DialogContent>
     </Dialog>

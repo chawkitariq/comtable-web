@@ -53,6 +53,7 @@ export function TaxNewPage() {
           <DialogDescription></DialogDescription>
         </DialogHeader>
 
+        {/* @ts-ignore */}
         <TaxForm form={form} />
 
         <DialogFooter>

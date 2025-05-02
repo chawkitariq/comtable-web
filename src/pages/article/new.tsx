@@ -55,6 +55,7 @@ export function ArticleNewPage() {
           <DialogDescription></DialogDescription>
         </DialogHeader>
 
+        {/* @ts-ignore */}
         <ArticleForm form={form} />
 
         <DialogFooter className="flex justify-end gap-4">

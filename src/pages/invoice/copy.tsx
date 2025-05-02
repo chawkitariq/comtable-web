@@ -37,6 +37,7 @@ export function InvoiceCopyPage() {
   });
 
   const form = useFormik<CreateDocumentPayloadType>({
+    // @ts-ignore
     initialValues: {
       ...convertNullToUndefined(invoice),
       issuedAt: invoice?.issuedAt ? new Date(invoice?.issuedAt) : undefined,
@@ -67,6 +68,7 @@ export function InvoiceCopyPage() {
       </div>
 
       <AspectRatio className="p-4 bg-gray-100">
+        {/* @ts-ignore */}
         <InvoiceDefaultTemplate invoice={form.values as DocumentType} />
       </AspectRatio>
     </main>

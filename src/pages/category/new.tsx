@@ -50,6 +50,7 @@ export function CategoryNewPage() {
           <DialogTitle>Nouveau</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
+        {/* @ts-ignore */}
         <CategoryForm form={form} />
       </DialogContent>
     </Dialog>

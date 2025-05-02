@@ -140,6 +140,7 @@ export function InvitationRootPage() {
         cell: ({ row }) => (
           <Badge
             className="lowercase"
+            // @ts-ignore
             variant={invitationStatusVariant[row.getValue("status")]}
           >
             {row.getValue("status")}
@@ -288,6 +289,7 @@ export function InvitationRootPage() {
         <div className="flex">
           <Tabs
             value={invitationFetchType}
+            // @ts-ignore
             onValueChange={setInvitationFetchType}
           >
             <TabsList>

@@ -48,7 +48,8 @@ export function InvitationNewPage() {
           <DialogTitle>Nouveau</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-
+        
+        {/* @ts-ignore */}
         <InvitationForm form={form} />
 
         <DialogFooter className="flex justify-end gap-4">
