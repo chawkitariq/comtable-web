@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,4 +10,31 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
+
+  <script>
+    (function (n, i, v, r, s, c, u, x, z) {
+      x = window.AwsRumClient = { q: [], n: n, i: i, v: v, r: r, c: c, u: u };
+      window[n] = function (c, p) {
+        x.q.push({ c: c, p: p });
+      };
+      z = document.createElement("script");
+      z.async = true;
+      z.src = s;
+      document.head.insertBefore(z, document.getElementsByTagName("script")[0]);
+    })(
+      "cwr",
+      "c898a1c1-2e39-4462-935b-513e4efa7d63",
+      "1.0.0",
+      "eu-north-1",
+      "https://client.rum.eu-north-1.amazonaws.com/1.x/cwr.js",
+      {
+        sessionSampleRate: 1,
+        identityPoolId: "eu-north-1:879707ac-040b-4795-b238-c8268cfb7996",
+        endpoint: "https://dataplane.rum.eu-north-1.amazonaws.com",
+        telemetries: ["performance", "errors", "http"],
+        allowCookies: true,
+        enableXRay: false,
+      }
+    );
+  </script>
 </html>
