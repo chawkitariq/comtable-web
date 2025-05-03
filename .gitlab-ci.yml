@@ -1,0 +1,37 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+
+build:
+  stage: build
+  image: node:22
+  script:
+    - npm install
+    - echo "VITE_API_BASE_URL=$VITE_API_BASE_URL" >> .env.production
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - main
+    - tags
+
+deploy:
+  stage: deploy
+  image: 
+    name: amazon/aws-cli:latest
+    entrypoint: [""]
+  script:
+    - aws s3 sync dist/ s3://${S3_BUCKET_NAME}/ --delete
+  dependencies:
+    - build
+  only:
+    - main
+    - tags
+  before_script:
+    - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+    - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+    - aws configure set region ${AWS_REGION}
