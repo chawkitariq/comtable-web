@@ -1,9 +1,10 @@
 services:
 
   web:
-    build: .
+    image: node:22.21
+    working_dir: /app
     volumes:
-      - "./:/home/node/web"
+      - "./:/app"
     ports:
       - "5173:5173"
     command: npm run dev:docker
